@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MarvelHeroes</string>
+    <string name="communication_error">Falha na comunicação com o servidor</string>
+    <string name="network_error">Verifique sua conexão</string>
+    <string name="unknown_error">Erro desconhecido</string>
+    <string name="invalid_parameters_error">Erro ao enviar a requisição, verifique os parâmetros enviados</string>
+    <string name="empty_response">Nenhum resultado encontrado</string>
 </resources>
