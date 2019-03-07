@@ -17,6 +17,7 @@ interface MarvelApi {
         private const val URL = "http://gateway.marvel.com/v1/public/"
         const val API_KEY_PRIVATE = "3274ea7e32afc7d375f8a219258a856414fec465"
         const val API_KEY_PUBLIC = "e1b13260fe6e390810479686622d590c"
+        const val LIMIT_RESULT_SIZE = 20
 
         fun create(): MarvelApi {
 
@@ -47,6 +48,8 @@ interface MarvelApi {
     @GET("characters")
     fun getHeroes(
         @Query("ts") ts: Long,
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int,
         @Query("apikey") apikey: String = API_KEY_PUBLIC,
         @Query("hash") hash: String
     ): Observable<MarvelResponses>

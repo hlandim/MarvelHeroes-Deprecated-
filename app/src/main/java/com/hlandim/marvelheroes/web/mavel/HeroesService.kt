@@ -10,6 +10,7 @@ class HeroesService(private val api: MarvelApi) : HeroesDataSource {
     override fun getHeroes(page: Int): Observable<MarvelResponses> {
         val timeStamp = Date().time
         val bodyHash = timeStamp.toString() + MarvelApi.API_KEY_PRIVATE + MarvelApi.API_KEY_PUBLIC
-        return api.getHeroes(ts = timeStamp, hash = bodyHash.md5())
+        val offset = (page - 1) * MarvelApi.LIMIT_RESULT_SIZE
+        return api.getHeroes(ts = timeStamp, hash = bodyHash.md5(), offset = offset)
     }
 }
