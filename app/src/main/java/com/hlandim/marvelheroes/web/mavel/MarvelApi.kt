@@ -52,6 +52,7 @@ interface MarvelApi {
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int,
         @Query("apikey") apikey: String = API_KEY_PUBLIC,
-        @Query("hash") hash: String
+        @Query("hash") hash: String,
+        @Query("nameStartsWith") nameStartsWith: String?
     ): Observable<MarvelResponses>
 }

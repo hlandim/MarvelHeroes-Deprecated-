@@ -15,6 +15,7 @@ class HeroesAdapter(private var hereos: MutableList<HeroResponse>) :
 
     lateinit var listener: ListListener
     private var hideLoading = false
+    private var noMoreResult = false
 
     companion object {
         const val ITEM = 1
@@ -68,6 +69,14 @@ class HeroesAdapter(private var hereos: MutableList<HeroResponse>) :
             } else {
                 footerHolder.itemView.pbLoadingNewHeroes.visibility = View.INVISIBLE
             }
+
+            if (noMoreResult && hideLoading && hereos.size > 0) {
+                footerHolder.itemView.tvNoMoreHeroes.visibility = View.VISIBLE
+            } else {
+                footerHolder.itemView.tvNoMoreHeroes.visibility = View.INVISIBLE
+            }
+
+
         }
     }
 
@@ -78,6 +87,7 @@ class HeroesAdapter(private var hereos: MutableList<HeroResponse>) :
 
     fun showLoading() {
         hideLoading = false
+        noMoreResult = false
         notifyDataSetChanged()
     }
 
@@ -94,8 +104,9 @@ class HeroesAdapter(private var hereos: MutableList<HeroResponse>) :
         fun onRowClicked(hero: HeroResponse)
     }
 
-    fun replaceItems(heroes: MutableList<HeroResponse>) {
-        this.hereos = heroes
+    fun replaceItems(newHeroes: MutableList<HeroResponse>) {
+        noMoreResult = this.hereos == newHeroes
+        this.hereos = newHeroes
         hideLoading = true
         notifyDataSetChanged()
     }

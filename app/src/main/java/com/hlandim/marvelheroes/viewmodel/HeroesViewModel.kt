@@ -5,6 +5,7 @@ import android.arch.lifecycle.*
 import android.util.Log
 import com.hlandim.marvelheroes.R
 import com.hlandim.marvelheroes.model.HeroResponse
+import com.hlandim.marvelheroes.model.MarvelResponses
 import com.hlandim.marvelheroes.util.Tags
 import com.hlandim.marvelheroes.util.androidThread
 import com.hlandim.marvelheroes.util.ioThread
@@ -27,6 +28,8 @@ class HeroesViewModel(application: Application, private val heroesRepository: He
         MutableLiveData<MutableList<HeroResponse>>().apply { value = mutableListOf() }
     val isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val communicationError = MutableLiveData<String>()
+    private var isSearchingMode = false
+    private var searchQuery: String? = null
     private var pageCount: Int = 0
 
     init {
@@ -46,27 +49,81 @@ class HeroesViewModel(application: Application, private val heroesRepository: He
     }
 
     fun requestNextHeroesPage() {
+
+        return if (isSearchingMode && searchQuery != null) {
+            requestNextSearchPage(searchQuery!!)
+        } else {
+            requestNextDefaultPage()
+        }
+
+    }
+
+    private fun requestNextSearchPage(query: String) {
+        if (query != searchQuery) {
+            pageCount = 0
+            heroes.value?.clear()
+        }
+        pageCount++
+        isSearchingMode = true
+        searchQuery = query
+        val disposable = heroesRepository.searchHero(query, pageCount)
+            .subscribeOn(ioThread())
+            .observeOn(androidThread())
+            .subscribe({
+                handleResponse(it)
+            }, {
+                handlerError(it)
+            })
+
+        compositeDisposable.add(disposable)
+
+    }
+
+    fun searchHero(query: String) {
+        isLoading.value = true
+        requestNextSearchPage(query)
+    }
+
+    fun reload() {
+        resetSearchVariables()
+        heroes.value?.clear()
+        load()
+    }
+
+    private fun resetSearchVariables() {
+        if (isSearchingMode) {
+            pageCount = 0
+            isSearchingMode = false
+        }
+        searchQuery = null
+    }
+
+
+    private fun requestNextDefaultPage() {
         pageCount++
         val disposable = heroesRepository.getHeroes(pageCount)
             .subscribeOn(ioThread())
             .observeOn(androidThread())
             .subscribe({
-                if (heroes.value!!.isEmpty()) {
-                    heroes.value = it.data.results.toMutableList()
-                } else {
-                    val finalList = heroes.value
-                    finalList!!.addAll(it.data.results)
-                    heroes.value = finalList
-                }
-
-                isLoading.value = false
+                handleResponse(it)
             }, {
-                Log.w(Tags.COMMUNICATION_ERROR, it.message)
-                handleCommunicationError(it)
-                isLoading.value = false
+                handlerError(it)
             })
 
         compositeDisposable.add(disposable)
+    }
+
+    private fun handlerError(it: Throwable) {
+        Log.w(Tags.COMMUNICATION_ERROR, it.message)
+        handleCommunicationError(it)
+        isLoading.value = false
+    }
+
+    private fun handleResponse(it: MarvelResponses) {
+        val finalList = heroes.value
+        finalList!!.addAll(it.data.results)
+        heroes.value = finalList
+        isLoading.value = false
     }
 
     private fun handleCommunicationError(t: Throwable) {
