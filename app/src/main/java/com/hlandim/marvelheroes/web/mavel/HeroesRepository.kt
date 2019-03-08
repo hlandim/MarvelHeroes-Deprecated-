@@ -1,5 +1,6 @@
 package com.hlandim.marvelheroes.web.mavel
 
+import com.hlandim.marvelheroes.model.MarvelResponses
 import com.hlandim.marvelheroes.web.HeroesDataSource
 import io.reactivex.Observable
 

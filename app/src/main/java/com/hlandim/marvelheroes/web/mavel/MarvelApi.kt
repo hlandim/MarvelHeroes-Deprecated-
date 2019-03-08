@@ -1,6 +1,7 @@
 package com.hlandim.marvelheroes.web.mavel
 
 import com.google.gson.GsonBuilder
+import com.hlandim.marvelheroes.model.MarvelResponses
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

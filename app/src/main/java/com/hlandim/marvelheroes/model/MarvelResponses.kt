@@ -1,11 +1,10 @@
-package com.hlandim.marvelheroes.web.mavel
+package com.hlandim.marvelheroes.model
 
 import java.util.*
 
 data class MarvelResponses(
     val code: Int,
     val status: String,
-    val dataResponse: DataResponse,
     val data: DataResponse
 )
 
@@ -14,10 +13,10 @@ data class DataResponse(
     val limit: Int,
     val total: Long,
     val count: Int,
-    val results: List<HeroesResponse>
+    val results: List<HeroResponse>
 )
 
-data class HeroesResponse(
+data class HeroResponse(
     val id: Int,
     val name: String,
     val description: String,
