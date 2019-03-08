@@ -14,8 +14,6 @@ class HeroesAdapter(private var hereos: MutableList<HeroResponse>) :
     RecyclerView.Adapter<HeroesAdapter.CustomViewHolder>() {
 
     lateinit var listener: ListListener
-    private var hideLoading = false
-    private var noMoreResult = false
 
     companion object {
         const val ITEM = 1
@@ -62,33 +60,34 @@ class HeroesAdapter(private var hereos: MutableList<HeroResponse>) :
             holder.itemView.setOnClickListener {
                 listener.onRowClicked(movie)
             }
-        } else {
+        }
+    }
+
+    override fun onBindViewHolder(holder: CustomViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.size > 0) {
             val footerHolder = holder as FooterHolder
-            if (!hideLoading && hereos.size > 0) {
+            val footerControl = payloads[0] as FooterControl
+            if (footerControl.showLoading) {
                 footerHolder.itemView.pbLoadingNewHeroes.visibility = View.VISIBLE
             } else {
                 footerHolder.itemView.pbLoadingNewHeroes.visibility = View.INVISIBLE
             }
 
-            if (noMoreResult && hideLoading && hereos.size > 0) {
+            if (footerControl.showNoMoreResult) {
                 footerHolder.itemView.tvNoMoreHeroes.visibility = View.VISIBLE
             } else {
                 footerHolder.itemView.tvNoMoreHeroes.visibility = View.INVISIBLE
             }
-
-
         }
+        super.onBindViewHolder(holder, position, payloads)
     }
 
     fun hideLoading() {
-        hideLoading = true
-        notifyDataSetChanged()
+        notifyItemChanged(hereos.size, FooterControl(showLoading = false, showNoMoreResult = false))
     }
 
     fun showLoading() {
-        hideLoading = false
-        noMoreResult = false
-        notifyDataSetChanged()
+        notifyItemChanged(hereos.size, FooterControl(showLoading = true, showNoMoreResult = false))
     }
 
 
@@ -105,9 +104,16 @@ class HeroesAdapter(private var hereos: MutableList<HeroResponse>) :
     }
 
     fun replaceItems(newHeroes: MutableList<HeroResponse>) {
-        noMoreResult = this.hereos == newHeroes
+        val noMoreResult = this.hereos == newHeroes
+        val actualSize = hereos.size
         this.hereos = newHeroes
-        hideLoading = true
-        notifyDataSetChanged()
+        when {
+            noMoreResult -> notifyItemChanged(actualSize, FooterControl(showLoading = false, showNoMoreResult = true))
+            actualSize == 0 -> notifyDataSetChanged()
+            newHeroes.size > actualSize -> notifyItemRangeChanged(actualSize, hereos.size - 1)
+            else -> notifyDataSetChanged()
+        }
     }
+
+    private data class FooterControl(val showLoading: Boolean, val showNoMoreResult: Boolean)
 }

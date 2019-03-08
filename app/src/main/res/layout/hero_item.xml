@@ -14,11 +14,12 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="4dp"
+        android:padding="5dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
@@ -27,16 +28,18 @@
         <RelativeLayout
             android:id="@+id/contentLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <ImageView
+                android:layout_margin="10dp"
                 android:id="@+id/posterImageView"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:importantForAccessibility="no"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_image_placeholder" />
+                android:src="@drawable/ic_image_placeholder"
+                app:imageUrl="@{hero.getFullThumbnailUrl}"
+                android:contentDescription="@string/thumbnails" />
 
             <TextView
                 android:id="@+id/titleTextView"

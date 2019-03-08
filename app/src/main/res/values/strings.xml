@@ -7,4 +7,8 @@
     <string name="empty_response">Nenhum resultado encontrado</string>
     <string name="search_title">Marvel Heroes</string>
     <string name="search_hint">Encontre seu herói</string>
+    <string name="thumbnails">Thumbnails</string>
+    <string name="no_more_results">Sem mais Heróis</string>
+    <string name="hero_not_found">Herói não encontrado</string>
+    <string name="sad_image">sad_image</string>
 </resources>

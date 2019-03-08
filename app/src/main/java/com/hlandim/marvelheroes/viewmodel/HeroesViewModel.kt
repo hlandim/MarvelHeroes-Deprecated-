@@ -27,8 +27,9 @@ class HeroesViewModel(application: Application, private val heroesRepository: He
     val heroes: MutableLiveData<MutableList<HeroResponse>> =
         MutableLiveData<MutableList<HeroResponse>>().apply { value = mutableListOf() }
     val isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
+    val isEmptySearch: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val communicationError = MutableLiveData<String>()
-    private var isSearchingMode = false
+    var isSearchingMode = false
     private var searchQuery: String? = null
     private var pageCount: Int = 0
 
@@ -61,7 +62,6 @@ class HeroesViewModel(application: Application, private val heroesRepository: He
     private fun requestNextSearchPage(query: String) {
         if (query != searchQuery) {
             pageCount = 0
-            heroes.value?.clear()
         }
         pageCount++
         isSearchingMode = true
@@ -81,26 +81,28 @@ class HeroesViewModel(application: Application, private val heroesRepository: He
 
     fun searchHero(query: String) {
         isLoading.value = true
+        isEmptySearch.value = false
         requestNextSearchPage(query)
     }
 
     fun reload() {
         resetSearchVariables()
-        heroes.value?.clear()
+        heroes.value!!.clear()
         load()
     }
 
     private fun resetSearchVariables() {
         if (isSearchingMode) {
-            pageCount = 0
             isSearchingMode = false
         }
+        pageCount = 0
         searchQuery = null
     }
 
 
     private fun requestNextDefaultPage() {
         pageCount++
+        isEmptySearch.value = false
         val disposable = heroesRepository.getHeroes(pageCount)
             .subscribeOn(ioThread())
             .observeOn(androidThread())
@@ -120,9 +122,14 @@ class HeroesViewModel(application: Application, private val heroesRepository: He
     }
 
     private fun handleResponse(it: MarvelResponses) {
-        val finalList = heroes.value
-        finalList!!.addAll(it.data.results)
+        val finalList = heroes.value!!.toMutableList()
+        if (pageCount == 1) {
+            finalList.clear()
+        }
+        finalList.addAll(it.data.results)
         heroes.value = finalList
+        communicationError.value = null
+        isEmptySearch.value = finalList.isNullOrEmpty()
         isLoading.value = false
     }
 

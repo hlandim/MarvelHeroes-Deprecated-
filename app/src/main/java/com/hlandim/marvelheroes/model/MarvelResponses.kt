@@ -16,14 +16,28 @@ data class DataResponse(
     val results: List<HeroResponse>
 )
 
-data class HeroResponse(
+class HeroResponse(
     val id: Int,
     val name: String,
     val description: String,
     val modified: Date,
     val thumbnail: Thumbnail,
     val comics: Comics
-)
+) {
+    fun getFullThumbnailUrl(): String {
+        return thumbnail.path + "." + thumbnail.extension
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other == null || other !is HeroResponse)
+            return false
+        return id == other.id
+    }
+
+    override fun hashCode(): Int {
+        return id + 30
+    }
+}
 
 data class Thumbnail(
     val path: String,
