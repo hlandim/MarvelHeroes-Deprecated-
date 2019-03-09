@@ -1,6 +1,6 @@
 package com.hlandim.marvelheroes.model
 
-import java.util.*
+import java.io.Serializable
 
 data class MarvelResponses(
     val code: Int,
@@ -13,44 +13,21 @@ data class DataResponse(
     val limit: Int,
     val total: Long,
     val count: Int,
-    val results: List<HeroResponse>
+    val results: List<Hero>
 )
-
-class HeroResponse(
-    val id: Int,
-    val name: String,
-    val description: String,
-    val modified: Date,
-    val thumbnail: Thumbnail,
-    val comics: Comics
-) {
-    fun getFullThumbnailUrl(): String {
-        return thumbnail.path + "." + thumbnail.extension
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (other == null || other !is HeroResponse)
-            return false
-        return id == other.id
-    }
-
-    override fun hashCode(): Int {
-        return id + 30
-    }
-}
 
 data class Thumbnail(
     val path: String,
     val extension: String
-)
+) : Serializable
 
 data class Comics(
     val available: Int,
     val returned: Int,
     val items: List<Comic>
-)
+) : Serializable
 
 data class Comic(
     val resourceURI: String,
     val name: String
-)
+) : Serializable

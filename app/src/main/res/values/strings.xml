@@ -11,4 +11,6 @@
     <string name="no_more_results">Sem mais Heróis</string>
     <string name="hero_not_found">Herói não encontrado</string>
     <string name="sad_image">sad_image</string>
+    <string name="title_activity_hero">HeroActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>

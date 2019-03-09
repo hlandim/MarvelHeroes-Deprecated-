@@ -4,7 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.*
 import android.util.Log
 import com.hlandim.marvelheroes.R
-import com.hlandim.marvelheroes.model.HeroResponse
+import com.hlandim.marvelheroes.model.Hero
 import com.hlandim.marvelheroes.model.MarvelResponses
 import com.hlandim.marvelheroes.util.Tags
 import com.hlandim.marvelheroes.util.androidThread
@@ -24,8 +24,8 @@ class HeroesViewModel(application: Application, private val heroesRepository: He
 
     private val compositeDisposable = CompositeDisposable()
 
-    val heroes: MutableLiveData<MutableList<HeroResponse>> =
-        MutableLiveData<MutableList<HeroResponse>>().apply { value = mutableListOf() }
+    val heroes: MutableLiveData<MutableList<Hero>> =
+        MutableLiveData<MutableList<Hero>>().apply { value = mutableListOf() }
     val isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val isEmptySearch: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val communicationError = MutableLiveData<String>()

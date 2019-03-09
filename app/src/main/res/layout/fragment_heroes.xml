@@ -36,7 +36,7 @@
             android:paddingBottom="12dp"
             android:visibility="@{safeUnbox(viewModel.isLoading) ?  View.GONE : View.VISIBLE}"
             app:items="@{viewModel.heroes}"
-            app:layoutManager="android.support.v7.widget.GridLayoutManager"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             tools:itemCount="10" />
 
         <LinearLayout

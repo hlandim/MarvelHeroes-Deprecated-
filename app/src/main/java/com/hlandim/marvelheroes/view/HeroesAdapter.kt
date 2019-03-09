@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.hlandim.marvelheroes.databinding.HeroItemBinding
 import com.hlandim.marvelheroes.databinding.RowLoadingBinding
-import com.hlandim.marvelheroes.model.HeroResponse
+import com.hlandim.marvelheroes.model.Hero
 import kotlinx.android.synthetic.main.row_loading.view.*
 
-class HeroesAdapter(private var hereos: MutableList<HeroResponse>) :
+class HeroesAdapter(private var hereos: MutableList<Hero>) :
     RecyclerView.Adapter<HeroesAdapter.CustomViewHolder>() {
 
     lateinit var listener: ListListener
@@ -24,17 +24,17 @@ class HeroesAdapter(private var hereos: MutableList<HeroResponse>) :
     }
 
     abstract class CustomViewHolder(binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
-        abstract fun bind(hero: HeroResponse)
+        abstract fun bind(hero: Hero)
     }
 
-    class ViewHolder(private val binding: HeroItemBinding) : CustomViewHolder(binding) {
-        override fun bind(hero: HeroResponse) {
+    class ViewHolder(val binding: HeroItemBinding) : CustomViewHolder(binding) {
+        override fun bind(hero: Hero) {
             binding.hero = hero
         }
     }
 
     class FooterHolder(binding: RowLoadingBinding) : CustomViewHolder(binding) {
-        override fun bind(hero: HeroResponse) {
+        override fun bind(hero: Hero) {
 
         }
 
@@ -56,9 +56,10 @@ class HeroesAdapter(private var hereos: MutableList<HeroResponse>) :
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         if (position < hereos.size) {
             val movie = hereos[position]
-            holder.bind(movie)
-            holder.itemView.setOnClickListener {
-                listener.onRowClicked(movie)
+            val rowHolder = holder as ViewHolder
+            rowHolder.bind(movie)
+            rowHolder.itemView.setOnClickListener {
+                listener.onRowClicked(rowHolder.binding, movie)
             }
         }
     }
@@ -100,10 +101,10 @@ class HeroesAdapter(private var hereos: MutableList<HeroResponse>) :
     }
 
     interface ListListener {
-        fun onRowClicked(hero: HeroResponse)
+        fun onRowClicked(binding: HeroItemBinding, hero: Hero)
     }
 
-    fun replaceItems(newHeroes: MutableList<HeroResponse>) {
+    fun replaceItems(newHeroes: MutableList<Hero>) {
         val noMoreResult = this.hereos == newHeroes
         val actualSize = hereos.size
         this.hereos = newHeroes

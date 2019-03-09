@@ -7,7 +7,7 @@
 
         <variable
             name="hero"
-            type="com.hlandim.marvelheroes.model.HeroResponse" />
+            type="com.hlandim.marvelheroes.model.Hero" />
 
         <import type="android.view.View" />
     </data>
@@ -19,10 +19,10 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="4dp"
-        android:padding="5dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
+        android:padding="5dp"
         app:cardCornerRadius="0dp">
 
         <RelativeLayout
@@ -31,25 +31,24 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:layout_margin="10dp"
+                android:transitionName="heroImage"
                 android:id="@+id/posterImageView"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/thumbnails"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_image_placeholder"
-                app:imageUrl="@{hero.getFullThumbnailUrl}"
-                android:contentDescription="@string/thumbnails" />
+                app:imageUrl="@{hero.getFullThumbnailUrl}" />
 
             <TextView
                 android:id="@+id/titleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_toEndOf="@id/posterImageView"
-                android:layout_toRightOf="@id/posterImageView"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textSize="16sp"

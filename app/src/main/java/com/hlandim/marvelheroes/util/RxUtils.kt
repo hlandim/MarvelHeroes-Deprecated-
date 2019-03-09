@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers
  * @return the result of Schedulers.io()
  * @see Schedulers.io()
  */
-fun ioThread():Scheduler{
+fun ioThread(): Scheduler {
     return Schedulers.io()
 }
 
@@ -18,6 +18,6 @@ fun ioThread():Scheduler{
  * @return the result of AndroidSchedulers.mainThread()
  * @see AndroidSchedulers.mainThread()
  */
-fun androidThread():Scheduler{
+fun androidThread(): Scheduler {
     return AndroidSchedulers.mainThread()
 }

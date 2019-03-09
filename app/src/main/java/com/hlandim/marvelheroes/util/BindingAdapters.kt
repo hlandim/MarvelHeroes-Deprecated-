@@ -1,24 +1,40 @@
 package com.hlandim.marvelheroes.util
 
 import android.databinding.BindingAdapter
+import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.text.Html
 import android.text.TextUtils
 import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.hlandim.marvelheroes.R
-import com.hlandim.marvelheroes.model.HeroResponse
+import com.hlandim.marvelheroes.model.Hero
 import com.hlandim.marvelheroes.view.HeroesAdapter
 
+
 @BindingAdapter("items")
-fun setItems(recyclerView: RecyclerView, list: MutableList<HeroResponse>) {
+fun setItems(recyclerView: RecyclerView, list: MutableList<Hero>) {
     recyclerView.adapter.let {
         if (it is HeroesAdapter) {
             it.replaceItems(list)
         }
     }
+}
+
+@BindingAdapter("textHtml")
+fun setTextHtml(textView: TextView, textHtml: String) {
+
+    val htmlAsSpanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        Html.fromHtml(textHtml, Html.FROM_HTML_MODE_LEGACY)
+    } else {
+        Html.fromHtml(textHtml)
+    }
+
+    textView.text = htmlAsSpanned
 }
 
 @BindingAdapter("imageUrl")
