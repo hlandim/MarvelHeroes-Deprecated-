@@ -33,7 +33,7 @@
                 android:fitsSystemWindows="true"
                 app:contentScrim="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:title="@{viewModel.getName}"
+                app:title="@{viewModel.hero.name}"
                 app:toolbarId="@+id/toolbar">
 
                 <ImageView

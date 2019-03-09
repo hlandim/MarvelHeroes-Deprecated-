@@ -12,9 +12,4 @@ class HeroViewModel(application: Application, private val heroesRepository: Hero
     AndroidViewModel(application), LifecycleObserver, Serializable {
 
     val hero: MutableLiveData<Hero> = MutableLiveData()
-
-    fun getName(): String? {
-        return hero.value?.name
-    }
-
 }
