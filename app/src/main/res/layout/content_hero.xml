@@ -13,10 +13,10 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="15dp"
         android:layout_marginTop="20dp"
+        android:padding="15dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".view.HeroActivity"
+        tools:context=".view.details.HeroActivity"
         tools:showIn="@layout/activity_hero">
 
         <RelativeLayout
@@ -31,11 +31,73 @@
                 android:text="@{viewModel.hero.resourceURI}" />
 
             <TextView
-                android:id="@+id/tvComics"
+                android:id="@+id/listComicsLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvResourceUri"
-                app:textHtml="@{viewModel.getFirstThreeComics}" />
+                android:gravity="center"
+                android:text="@string/comics"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/listComics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/listComicsLabel"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:participation="@{viewModel.hero.comics.items}" />
+
+            <TextView
+                android:id="@+id/listSeriesLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/listComics"
+                android:gravity="center"
+                android:text="@string/series"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/listStories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/listSeriesLabel"
+                app:participation="@{viewModel.hero.series.items}" />
+
+            <TextView
+                android:id="@+id/listStoriesLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/listStories"
+                android:gravity="center"
+                android:text="@string/stories"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/listSeries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/listStoriesLabel"
+                app:participation="@{viewModel.hero.stories.items}" />
+
+            <TextView
+                android:id="@+id/listEventsLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/listSeries"
+                android:gravity="center"
+                android:text="@string/events"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <ListView
+                android:id="@+id/listEvents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/listEventsLabel"
+                app:participation="@{viewModel.hero.events.items}" />
 
 
         </RelativeLayout>

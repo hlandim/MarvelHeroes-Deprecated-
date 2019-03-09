@@ -13,4 +13,8 @@
     <string name="sad_image">sad_image</string>
     <string name="title_activity_hero">HeroActivity</string>
     <string name="action_settings">Settings</string>
+    <string name="comics">Comics</string>
+    <string name="series">Series</string>
+    <string name="stories">Stories</string>
+    <string name="events">Events</string>
 </resources>

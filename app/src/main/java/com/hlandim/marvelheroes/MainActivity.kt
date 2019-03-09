@@ -9,7 +9,7 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import com.hlandim.marvelheroes.util.getViewModel
-import com.hlandim.marvelheroes.view.HeroesFragment
+import com.hlandim.marvelheroes.view.list.HeroesFragment
 import com.hlandim.marvelheroes.viewmodel.HeroesViewModel
 import com.hlandim.marvelheroes.web.mavel.HeroesRepository
 import com.hlandim.marvelheroes.web.mavel.HeroesService

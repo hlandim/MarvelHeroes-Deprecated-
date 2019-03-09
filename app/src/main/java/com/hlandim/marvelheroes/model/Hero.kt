@@ -10,7 +10,10 @@ class Hero(
     val modified: Date,
     val thumbnail: Thumbnail,
     val resourceURI: String,
-    val comics: Comics
+    val comics: ParticipationResponse,
+    val series: ParticipationResponse,
+    val stories: ParticipationResponse,
+    val events: ParticipationResponse
 ) : Serializable {
 
     fun getFullThumbnailUrl(): String {

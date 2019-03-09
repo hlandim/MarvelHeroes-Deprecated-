@@ -21,13 +21,14 @@ data class Thumbnail(
     val extension: String
 ) : Serializable
 
-data class Comics(
+data class ParticipationResponse(
     val available: Int,
     val returned: Int,
-    val items: List<Comic>
+    val items: List<Participation>
 ) : Serializable
 
-data class Comic(
+class Participation(
     val resourceURI: String,
-    val name: String
+    val name: String,
+    val description: String
 ) : Serializable

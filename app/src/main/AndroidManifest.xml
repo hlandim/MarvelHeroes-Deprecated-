@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.HeroActivity"
+            android:name=".view.details.HeroActivity"
             android:label="@string/title_activity_hero"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity

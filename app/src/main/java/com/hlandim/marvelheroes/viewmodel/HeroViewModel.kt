@@ -17,14 +17,4 @@ class HeroViewModel(application: Application, private val heroesRepository: Hero
         return hero.value?.name
     }
 
-    fun getFirstThreeComics(): String {
-
-        val builder = StringBuilder("<ul>")
-        hero.value!!.comics.items.take(3).forEach {
-            builder.append("<li>" + it.name + "</li>")
-        }
-
-        return builder.toString()
-    }
-
 }

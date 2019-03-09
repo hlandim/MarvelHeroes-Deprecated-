@@ -1,4 +1,4 @@
-package com.hlandim.marvelheroes.view
+package com.hlandim.marvelheroes.view.details
 
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.Drawable
@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.transition.ChangeBounds
 import android.transition.ChangeImageTransform
 import android.transition.TransitionSet
+import android.view.ViewTreeObserver
+import android.widget.ListView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -28,11 +30,7 @@ class HeroActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_hero)
         setSupportActionBar(toolbar)
-        fab.setOnClickListener { view ->
-
-        }
         val binding = DataBindingUtil.setContentView<ActivityHeroBinding>(this, R.layout.activity_hero)
         val hero = intent?.extras?.getSerializable("hero") as Hero
         val viewModel = createViewModel()
@@ -49,8 +47,25 @@ class HeroActivity : AppCompatActivity() {
                 loadImage(binding, hero)
             }
 
+        configureListHeight(binding.heroContent.listComics)
 
     }
+
+    private fun configureListHeight(list: ListView) {
+        val viewTreeObserver = list.viewTreeObserver
+        if (viewTreeObserver.isAlive) {
+            viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    list.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    val layoutParams = list.layoutParams
+                    val finalHeight = list.height * list.adapter.count
+                    layoutParams.height = finalHeight
+                    list.layoutParams = layoutParams
+                }
+            })
+        }
+    }
+
 
     private fun loadImage(
         binding: ActivityHeroBinding,

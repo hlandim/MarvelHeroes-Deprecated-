@@ -1,4 +1,4 @@
-package com.hlandim.marvelheroes.view
+package com.hlandim.marvelheroes.view.list
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -11,10 +11,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.hlandim.marvelheroes.databinding.FragmentHeroesBinding
 import com.hlandim.marvelheroes.databinding.HeroItemBinding
 import com.hlandim.marvelheroes.model.Hero
+import com.hlandim.marvelheroes.view.details.HeroActivity
 import com.hlandim.marvelheroes.viewmodel.HeroesViewModel
 
 

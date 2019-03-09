@@ -1,4 +1,4 @@
-package com.hlandim.marvelheroes.view
+package com.hlandim.marvelheroes.view.list
 
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
@@ -84,11 +84,18 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
     }
 
     fun hideLoading() {
-        notifyItemChanged(hereos.size, FooterControl(showLoading = false, showNoMoreResult = false))
+        notifyItemChanged(hereos.size,
+            FooterControl(
+                showLoading = false,
+                showNoMoreResult = false
+            )
+        )
     }
 
     fun showLoading() {
-        notifyItemChanged(hereos.size, FooterControl(showLoading = true, showNoMoreResult = false))
+        notifyItemChanged(hereos.size,
+            FooterControl(showLoading = true, showNoMoreResult = false)
+        )
     }
 
 
@@ -109,7 +116,12 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
         val actualSize = hereos.size
         this.hereos = newHeroes
         when {
-            noMoreResult -> notifyItemChanged(actualSize, FooterControl(showLoading = false, showNoMoreResult = true))
+            noMoreResult -> notifyItemChanged(actualSize,
+                FooterControl(
+                    showLoading = false,
+                    showNoMoreResult = true
+                )
+            )
             actualSize == 0 -> notifyDataSetChanged()
             newHeroes.size > actualSize -> notifyItemRangeChanged(actualSize, hereos.size - 1)
             else -> notifyDataSetChanged()
