@@ -8,26 +8,31 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
-import com.hlandim.marvelheroes.database.AppDataBase
-import com.hlandim.marvelheroes.database.HeroesRepository
 import com.hlandim.marvelheroes.util.getViewModel
 import com.hlandim.marvelheroes.view.list.HeroesFragment
 import com.hlandim.marvelheroes.viewmodel.HeroesViewModel
-import com.hlandim.marvelheroes.web.mavel.HeroesService
-import com.hlandim.marvelheroes.web.mavel.MarvelApi
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mViewModel: HeroesViewModel
     private lateinit var searchView: SearchView
 
+    companion object {
+        const val FRAGMENT_TAG = "fragemnt_tag"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         mViewModel = createViewModel()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentLayout, HeroesFragment()).commit()
+        val fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG)
+        if (fragment == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragmentLayout, HeroesFragment(), FRAGMENT_TAG).commit()
+        } else {
+            supportFragmentManager.beginTransaction().show(fragment).commit()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

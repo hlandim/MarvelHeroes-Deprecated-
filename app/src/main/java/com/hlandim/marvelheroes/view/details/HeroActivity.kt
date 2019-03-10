@@ -39,8 +39,12 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
         super.onCreate(savedInstanceState)
         setSupportActionBar(toolbar)
         val binding = DataBindingUtil.setContentView<ActivityHeroBinding>(this, R.layout.activity_hero)
-        val hero = intent?.extras?.getSerializable("hero") as Hero
+        var hero = intent?.extras?.getSerializable("hero") as Hero
+        if (savedInstanceState != null) {
+            hero = savedInstanceState.getSerializable("hero") as Hero
+        }
         mViewModel = createViewModel()
+
         mViewModel.hero.value = hero
 
         binding.lifecycleOwner = this
@@ -60,6 +64,11 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
         binding.heroContent.listSeries.adapter = ParticipationAdapter(emptyList(), this)
         binding.heroContent.listStories.adapter = ParticipationAdapter(emptyList(), this)
 
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putSerializable("hero", mViewModel.hero.value)
+        super.onSaveInstanceState(outState)
     }
 
     override fun onParticipationClicked(participation: Participation) {
