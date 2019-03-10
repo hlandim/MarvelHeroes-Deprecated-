@@ -144,7 +144,7 @@ class HeroesViewModel(application: Application, private val heroesRepository: He
     }
 
     override fun onCleared() {
-        compositeDisposable.dispose()
+        compositeDisposable.clear()
         super.onCleared()
     }
 

@@ -1,20 +1,54 @@
 package com.hlandim.marvelheroes.model
 
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
+import android.arch.persistence.room.PrimaryKey
 import java.io.Serializable
 import java.util.*
 
+@Entity
 class Hero(
-    val id: Int,
-    val name: String,
+    @PrimaryKey
+    var id: Int,
+    @ColumnInfo(name = "name")
+    var name: String,
+    @Ignore
     val description: String,
+    @Ignore
     val modified: Date,
+    @Ignore
     val thumbnail: Thumbnail,
+    @Ignore
     val resourceURI: String,
+    @Ignore
+    var favorite: Boolean,
+    @Ignore
     val comics: ParticipationResponse,
+    @Ignore
     val series: ParticipationResponse,
+    @Ignore
     val stories: ParticipationResponse,
+    @Ignore
     val events: ParticipationResponse
 ) : Serializable {
+
+    constructor() :
+
+            this(
+                0,
+                "",
+                "",
+                Date(),
+                Thumbnail("", ""),
+                "",
+                false,
+                ParticipationResponse(0, 0, emptyList()),
+                ParticipationResponse(0, 0, emptyList()),
+                ParticipationResponse(0, 0, emptyList()),
+                ParticipationResponse(0, 0, emptyList())
+            )
+
 
     override fun equals(other: Any?): Boolean {
         if (other == null || other !is Hero)

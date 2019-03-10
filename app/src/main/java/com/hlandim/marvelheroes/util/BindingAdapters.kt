@@ -1,7 +1,10 @@
+@file:Suppress("DEPRECATION")
+
 package com.hlandim.marvelheroes.util
 
 import android.databinding.BindingAdapter
 import android.os.Build
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.text.Html
@@ -65,3 +68,9 @@ fun setImageUrl(view: ImageView, url: String?) {
         view.setImageDrawable(ContextCompat.getDrawable(view.context, R.drawable.ic_image_placeholder))
     }
 }
+
+@BindingAdapter("imageResource")
+fun setImageResource(fab: FloatingActionButton, resource: Int) {
+    fab.setImageDrawable(ContextCompat.getDrawable(fab.context, resource))
+}
+
