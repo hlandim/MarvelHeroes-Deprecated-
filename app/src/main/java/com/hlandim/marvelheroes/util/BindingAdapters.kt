@@ -21,7 +21,7 @@ import com.hlandim.marvelheroes.view.list.HeroesAdapter
 
 @BindingAdapter("items")
 fun setItems(recyclerView: RecyclerView, list: MutableList<Hero>) {
-    recyclerView.adapter.let {
+    recyclerView.adapter?.let {
         if (it is HeroesAdapter) {
             it.replaceItems(list)
         }
@@ -32,15 +32,12 @@ fun setItems(recyclerView: RecyclerView, list: MutableList<Hero>) {
 @BindingAdapter("participation")
 fun setParticipation(listView: ListView, list: List<Participation>) {
     val participation = list.take(3)
-    if (listView.adapter == null) {
-        listView.adapter = ParticipationAdapter(listView.context, participation)
-    } else {
-        listView.adapter.let {
-            if (it is ParticipationAdapter) {
-                it.setParticipation(participation)
-            }
+    listView.adapter?.let {
+        if (it is ParticipationAdapter) {
+            it.setParticipation(participation)
         }
     }
+
 }
 
 

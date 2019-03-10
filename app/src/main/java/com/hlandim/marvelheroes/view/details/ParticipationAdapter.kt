@@ -1,6 +1,5 @@
 package com.hlandim.marvelheroes.view.details
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,9 +7,10 @@ import android.widget.BaseAdapter
 import com.hlandim.marvelheroes.databinding.HeroParticipationListRowBinding
 import com.hlandim.marvelheroes.model.Participation
 
-class ParticipationAdapter(private val context: Context, var list: List<Participation>) : BaseAdapter() {
-
-    private val layoutInflater = LayoutInflater.from(context)
+class ParticipationAdapter(
+    var list: List<Participation>,
+    val listener: ParticipationListener
+) : BaseAdapter() {
 
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -26,7 +26,9 @@ class ParticipationAdapter(private val context: Context, var list: List<Particip
             rowView = convertView
             holder = rowView.tag as ViewHolder
         }
+        val participation = list[position]
         holder.bind(list[position])
+        holder.binding.root.setOnClickListener { listener.onParticipationClicked(participation) }
         return rowView
 
     }
@@ -52,5 +54,9 @@ class ParticipationAdapter(private val context: Context, var list: List<Particip
     fun setParticipation(list: List<Participation>) {
         this.list = list
         notifyDataSetChanged()
+    }
+
+    interface ParticipationListener {
+        fun onParticipationClicked(participation: Participation)
     }
 }

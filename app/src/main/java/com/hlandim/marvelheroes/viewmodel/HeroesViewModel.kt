@@ -5,7 +5,7 @@ import android.arch.lifecycle.*
 import android.util.Log
 import com.hlandim.marvelheroes.R
 import com.hlandim.marvelheroes.model.Hero
-import com.hlandim.marvelheroes.model.MarvelResponses
+import com.hlandim.marvelheroes.model.MarvelHeroResponses
 import com.hlandim.marvelheroes.util.Tags
 import com.hlandim.marvelheroes.util.androidThread
 import com.hlandim.marvelheroes.util.ioThread
@@ -15,11 +15,10 @@ import io.reactivex.functions.Consumer
 import io.reactivex.plugins.RxJavaPlugins
 import retrofit2.HttpException
 import java.io.IOException
-import java.io.Serializable
 import java.net.UnknownHostException
 
 class HeroesViewModel(application: Application, private val heroesRepository: HeroesRepository) :
-    AndroidViewModel(application), LifecycleObserver, Serializable, Consumer<Throwable> {
+    AndroidViewModel(application), LifecycleObserver, Consumer<Throwable> {
 
 
     private val compositeDisposable = CompositeDisposable()
@@ -121,7 +120,7 @@ class HeroesViewModel(application: Application, private val heroesRepository: He
         isLoading.value = false
     }
 
-    private fun handleResponse(it: MarvelResponses) {
+    private fun handleResponse(it: MarvelHeroResponses) {
         val finalList = heroes.value!!.toMutableList()
         if (pageCount == 1) {
             finalList.clear()
@@ -134,7 +133,7 @@ class HeroesViewModel(application: Application, private val heroesRepository: He
     }
 
     private fun handleCommunicationError(t: Throwable) {
-        val message = when (t.cause) {
+        val message = when (t) {
             is UnknownHostException,
             is IOException -> getApplication<Application>().getString(R.string.network_error)
             is HttpException -> getApplication<Application>().getString(R.string.invalid_parameters_error)

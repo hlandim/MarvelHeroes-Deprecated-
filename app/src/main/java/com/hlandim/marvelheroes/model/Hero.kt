@@ -16,10 +16,6 @@ class Hero(
     val events: ParticipationResponse
 ) : Serializable {
 
-    fun getFullThumbnailUrl(): String {
-        return thumbnail.path + "." + thumbnail.extension
-    }
-
     override fun equals(other: Any?): Boolean {
         if (other == null || other !is Hero)
             return false

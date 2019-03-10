@@ -31,7 +31,6 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:transitionName="heroImage"
                 android:id="@+id/posterImageView"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
@@ -40,7 +39,8 @@
                 android:contentDescription="@string/thumbnails"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_image_placeholder"
-                app:imageUrl="@{hero.getFullThumbnailUrl}" />
+                android:transitionName="heroImage"
+                app:imageUrl="@{hero.thumbnail.getFullThumbnailUrl}" />
 
             <TextView
                 android:id="@+id/titleTextView"
