@@ -8,10 +8,11 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
+import com.hlandim.marvelheroes.database.AppDataBase
+import com.hlandim.marvelheroes.database.HeroesRepository
 import com.hlandim.marvelheroes.util.getViewModel
 import com.hlandim.marvelheroes.view.list.HeroesFragment
 import com.hlandim.marvelheroes.viewmodel.HeroesViewModel
-import com.hlandim.marvelheroes.web.mavel.HeroesRepository
 import com.hlandim.marvelheroes.web.mavel.HeroesService
 import com.hlandim.marvelheroes.web.mavel.MarvelApi
 
@@ -80,9 +81,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createViewModel(): HeroesViewModel {
-        val heroesService = HeroesService(MarvelApi.create())
-        val heroesRepository = HeroesRepository(heroesService)
-        return getViewModel { HeroesViewModel(application, heroesRepository) }
+        return getViewModel { HeroesViewModel(application) }
     }
 
 }

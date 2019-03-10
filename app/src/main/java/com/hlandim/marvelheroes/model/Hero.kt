@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
+import com.hlandim.marvelheroes.R
 import java.io.Serializable
 import java.util.*
 
@@ -58,5 +59,13 @@ class Hero(
 
     override fun hashCode(): Int {
         return id + 30
+    }
+
+    fun getFavoriteImage(): Int {
+        return if (favorite) {
+            R.drawable.ic_star_filled
+        } else {
+            R.drawable.ic_star
+        }
     }
 }

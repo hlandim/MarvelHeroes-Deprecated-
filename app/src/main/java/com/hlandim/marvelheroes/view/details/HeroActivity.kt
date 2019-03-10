@@ -1,5 +1,7 @@
 package com.hlandim.marvelheroes.view.details
 
+import android.app.Activity
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -22,9 +24,6 @@ import com.hlandim.marvelheroes.model.ResultParticipationResponse
 import com.hlandim.marvelheroes.model.Thumbnail
 import com.hlandim.marvelheroes.util.getViewModel
 import com.hlandim.marvelheroes.viewmodel.HeroViewModel
-import com.hlandim.marvelheroes.web.mavel.HeroesRepository
-import com.hlandim.marvelheroes.web.mavel.HeroesService
-import com.hlandim.marvelheroes.web.mavel.MarvelApi
 import kotlinx.android.synthetic.main.activity_hero.*
 
 class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationListener {
@@ -108,9 +107,7 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
 
 
     private fun createViewModel(): HeroViewModel {
-        val heroesService = HeroesService(MarvelApi.create())
-        val heroesRepository = HeroesRepository(heroesService)
-        return getViewModel { HeroViewModel(application, heroesRepository) }
+        return getViewModel { HeroViewModel(application) }
     }
 
     override fun onBackPressed() {
@@ -118,6 +115,14 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
         if (fragment != null) {
             (fragment as ParticipationFragment).startCloseAnimation()
         } else {
+            val bundle = Bundle().apply {
+                putInt("position", intent?.extras?.getInt("position")!!)
+                putSerializable("hero", mViewModel.hero.value)
+            }
+            val intent = Intent().apply {
+                putExtras(bundle)
+            }
+            setResult(Activity.RESULT_OK, intent)
             super.onBackPressed()
         }
     }

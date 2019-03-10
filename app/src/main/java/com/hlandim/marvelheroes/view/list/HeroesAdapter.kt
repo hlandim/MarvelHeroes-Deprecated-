@@ -59,7 +59,7 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
             val rowHolder = holder as ViewHolder
             rowHolder.bind(movie)
             rowHolder.itemView.setOnClickListener {
-                listener.onRowClicked(rowHolder.binding, movie)
+                listener.onRowClicked(rowHolder.binding, movie, position)
             }
         }
     }
@@ -84,7 +84,8 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
     }
 
     fun hideLoading() {
-        notifyItemChanged(hereos.size,
+        notifyItemChanged(
+            hereos.size,
             FooterControl(
                 showLoading = false,
                 showNoMoreResult = false
@@ -93,7 +94,8 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
     }
 
     fun showLoading() {
-        notifyItemChanged(hereos.size,
+        notifyItemChanged(
+            hereos.size,
             FooterControl(showLoading = true, showNoMoreResult = false)
         )
     }
@@ -108,7 +110,12 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
     }
 
     interface ListListener {
-        fun onRowClicked(binding: HeroItemBinding, hero: Hero)
+        fun onRowClicked(binding: HeroItemBinding, hero: Hero, position: Int)
+    }
+
+    fun updateItem(hero: Hero, position: Int) {
+        this.hereos[position] = hero
+        notifyItemChanged(position)
     }
 
     fun replaceItems(newHeroes: MutableList<Hero>) {
@@ -116,7 +123,8 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
         val actualSize = hereos.size
         this.hereos = newHeroes
         when {
-            noMoreResult -> notifyItemChanged(actualSize,
+            noMoreResult -> notifyItemChanged(
+                actualSize,
                 FooterControl(
                     showLoading = false,
                     showNoMoreResult = true

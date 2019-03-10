@@ -20,21 +20,27 @@ import com.hlandim.marvelheroes.viewmodel.HeroesViewModel
 
 class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
 
+    lateinit var mAdapter: HeroesAdapter
+
+    companion object {
+        const val REQUEST_CODE = 111
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentHeroesBinding.inflate(inflater, container, false)
         val viewModel = ViewModelProviders.of(this.activity!!).get(HeroesViewModel::class.java)
-        val adapter = HeroesAdapter(emptyList<Hero>().toMutableList())
-        adapter.listener = this
+        mAdapter = HeroesAdapter(emptyList<Hero>().toMutableList())
+        mAdapter.listener = this
         binding.lifecycleOwner = this
         this.lifecycle.addObserver(viewModel)
-        binding.recyclerView.adapter = adapter
+        binding.recyclerView.adapter = mAdapter
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!recyclerView.canScrollVertically(1)
                     && !viewModel.isLoading.value!!
                 ) {
-                    binding.recyclerView.post { adapter.showLoading() }
+                    binding.recyclerView.post { mAdapter.showLoading() }
                     viewModel.requestNextHeroesPage()
                 }
             }
@@ -46,13 +52,18 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
             }
         })
 
+        viewModel.favoritesHeroes.observe(this, Observer {
+
+        })
+
         binding.viewModel = viewModel
         return binding.root
     }
 
-    override fun onRowClicked(binding: HeroItemBinding, hero: Hero) {
+    override fun onRowClicked(binding: HeroItemBinding, hero: Hero, position: Int) {
         val bundle = Bundle().apply {
             putSerializable("hero", hero)
+            putInt("position", position)
         }
         if (activity != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -66,15 +77,27 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
                 Intent(activity, HeroActivity::class.java)
                     .putExtras(bundle)
                     .let {
-                        startActivity(it, options)
+                        startActivityForResult(it, REQUEST_CODE, options)
                     }
             } else {
                 Intent(activity, HeroActivity::class.java)
                     .putExtras(bundle)
                     .let {
-                        startActivity(it)
+                        startActivityForResult(it, REQUEST_CODE)
                     }
             }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE) {
+            val position = data?.getIntExtra("position", -1)
+            val hero = data?.getSerializableExtra("hero")
+            if (hero != null && position != null && position > -1) {
+                mAdapter.updateItem(hero as Hero, position)
+            }
+
         }
     }
 

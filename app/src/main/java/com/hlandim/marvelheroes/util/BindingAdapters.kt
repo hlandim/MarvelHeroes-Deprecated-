@@ -74,3 +74,8 @@ fun setImageResource(fab: FloatingActionButton, resource: Int) {
     fab.setImageDrawable(ContextCompat.getDrawable(fab.context, resource))
 }
 
+@BindingAdapter("imageResource")
+fun setImageResource(imageView: ImageView, resource: Int) {
+    imageView.setImageDrawable(ContextCompat.getDrawable(imageView.context, resource))
+}
+

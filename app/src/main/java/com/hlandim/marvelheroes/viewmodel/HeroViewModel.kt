@@ -1,20 +1,20 @@
 package com.hlandim.marvelheroes.viewmodel
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.*
 import android.util.Log
 import android.view.View
-import com.hlandim.marvelheroes.MyApplication
 import com.hlandim.marvelheroes.R
+import com.hlandim.marvelheroes.database.AppDataBase
+import com.hlandim.marvelheroes.database.HeroesRepository
 import com.hlandim.marvelheroes.database.model.FavoriteHero
 import com.hlandim.marvelheroes.model.Hero
 import com.hlandim.marvelheroes.model.ResultParticipationResponse
 import com.hlandim.marvelheroes.util.Tags
 import com.hlandim.marvelheroes.util.androidThread
 import com.hlandim.marvelheroes.util.ioThread
-import com.hlandim.marvelheroes.web.mavel.HeroesRepository
+import com.hlandim.marvelheroes.web.mavel.HeroesService
+import com.hlandim.marvelheroes.web.mavel.MarvelApi
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import retrofit2.HttpException
@@ -22,7 +22,7 @@ import java.io.IOException
 import java.net.SocketException
 import java.net.UnknownHostException
 
-class HeroViewModel(application: Application, private val heroesRepository: HeroesRepository) :
+class HeroViewModel(application: Application) :
     AndroidViewModel(application), LifecycleObserver {
 
     private val compositeDisposable = CompositeDisposable()
@@ -32,6 +32,23 @@ class HeroViewModel(application: Application, private val heroesRepository: Hero
     val isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val participation: MutableLiveData<ResultParticipationResponse> = MutableLiveData()
     val communicationError = MutableLiveData<String>()
+    private val heroesRepository: HeroesRepository
+
+    init {
+        val heroesService = HeroesService(MarvelApi.create())
+        heroesRepository = HeroesRepository(heroesService, AppDataBase.getDataBase(application).favoriteDao())
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun load() {
+        setFabIcon()
+    }
+
+    private fun setFabIcon() {
+        if (hero.value != null) {
+            fabResource.value = hero.value!!.getFavoriteImage()
+        }
+    }
 
 
     fun getParticipationDetails(participationPath: String) {
@@ -62,7 +79,7 @@ class HeroViewModel(application: Application, private val heroesRepository: Hero
         if (hero.value != null) {
             val favorite = FavoriteHero(id = hero.value!!.id, hero = hero.value!!)
             val disposable =
-                Observable.fromCallable { MyApplication.database?.favoriteDao()?.insertFavoriteHero(favorite) }
+                Observable.fromCallable { heroesRepository.insertFavoriteHero(favorite) }
                     .subscribeOn(ioThread())
                     .observeOn(androidThread())
                     .subscribe({
@@ -79,15 +96,23 @@ class HeroViewModel(application: Application, private val heroesRepository: Hero
     private fun removeFavoriteHero() {
         if (hero.value != null) {
             val favorite = FavoriteHero(id = hero.value!!.id, hero = hero.value!!)
-            MyApplication.database?.favoriteDao()?.removerFavoriteHero(favorite)
-            hero.value!!.favorite = false
-            fabResource.value = R.drawable.ic_star
+            val disposable =
+                Observable.fromCallable { heroesRepository.removerFavoriteHero(favorite) }
+                    .subscribeOn(ioThread())
+                    .observeOn(androidThread())
+                    .subscribe({
+                        hero.value!!.favorite = false
+                        fabResource.value = R.drawable.ic_star
+                    }, {
+                        handlerError(it)
+                    })
+            compositeDisposable.add(disposable)
         }
     }
 
     override fun onCleared() {
-        compositeDisposable.clear()
         super.onCleared()
+        compositeDisposable.clear()
     }
 
 

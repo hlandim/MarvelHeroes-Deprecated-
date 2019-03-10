@@ -48,12 +48,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_toStartOf="@+id/imgFavorite"
                 android:layout_toEndOf="@id/posterImageView"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="@{hero.name}" />
+
+            <ImageView
+                android:id="@+id/imgFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:visibility="@{hero.favorite ? View.VISIBLE : View.GONE}"
+                app:imageResource="@{hero.getFavoriteImage}"
+                android:contentDescription="@null" />
 
         </RelativeLayout>
 

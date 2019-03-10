@@ -4,12 +4,16 @@ import android.app.Application
 import android.arch.lifecycle.*
 import android.util.Log
 import com.hlandim.marvelheroes.R
+import com.hlandim.marvelheroes.database.AppDataBase
+import com.hlandim.marvelheroes.database.HeroesRepository
+import com.hlandim.marvelheroes.database.model.FavoriteHero
 import com.hlandim.marvelheroes.model.Hero
 import com.hlandim.marvelheroes.model.MarvelHeroResponses
 import com.hlandim.marvelheroes.util.Tags
 import com.hlandim.marvelheroes.util.androidThread
 import com.hlandim.marvelheroes.util.ioThread
-import com.hlandim.marvelheroes.web.mavel.HeroesRepository
+import com.hlandim.marvelheroes.web.mavel.HeroesService
+import com.hlandim.marvelheroes.web.mavel.MarvelApi
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.plugins.RxJavaPlugins
@@ -17,7 +21,7 @@ import retrofit2.HttpException
 import java.io.IOException
 import java.net.UnknownHostException
 
-class HeroesViewModel(application: Application, private val heroesRepository: HeroesRepository) :
+class HeroesViewModel(application: Application) :
     AndroidViewModel(application), LifecycleObserver, Consumer<Throwable> {
 
 
@@ -25,15 +29,20 @@ class HeroesViewModel(application: Application, private val heroesRepository: He
 
     val heroes: MutableLiveData<MutableList<Hero>> =
         MutableLiveData<MutableList<Hero>>().apply { value = mutableListOf() }
+    val favoritesHeroes: LiveData<List<FavoriteHero>>
     val isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val isEmptySearch: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val communicationError = MutableLiveData<String>()
+    private val heroesRepository: HeroesRepository
     var isSearchingMode = false
     private var searchQuery: String? = null
     private var pageCount: Int = 0
 
     init {
         RxJavaPlugins.setErrorHandler(this)
+        val heroesService = HeroesService(MarvelApi.create())
+        heroesRepository = HeroesRepository(heroesService, AppDataBase.getDataBase(application).favoriteDao())
+        favoritesHeroes = heroesRepository.favorites
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
