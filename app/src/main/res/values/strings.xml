@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MarvelHeroes</string>
+    <string name="app_name">Marvel Heroes</string>
     <string name="communication_error">Falha na comunicação com o servidor</string>
     <string name="network_error">Verifique sua conexão</string>
     <string name="unknown_error">Erro desconhecido</string>
@@ -17,5 +17,5 @@
     <string name="series">Series</string>
     <string name="stories">Stories</string>
     <string name="events">Events</string>
-    <string name="favorites">Favoritose</string>
+    <string name="favorites">Favoritos</string>
 </resources>

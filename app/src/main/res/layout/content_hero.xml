@@ -30,74 +30,134 @@
                 android:layout_alignParentTop="true"
                 android:text="@{viewModel.hero.resourceURI}" />
 
-            <TextView
-                android:id="@+id/listComicsLabel"
+
+            <RelativeLayout
+                android:id="@+id/listComicsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvResourceUri"
-                android:gravity="center"
-                android:text="@string/comics"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="10dp">
 
-            <ListView
-                android:id="@+id/listComics"
+                <TextView
+                    android:id="@+id/listComicsLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:text="@string/comics"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <ListView
+                    android:id="@+id/listComics"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/listComicsLabel"
+                    android:layout_marginTop="10dp"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    app:participation="@{viewModel.hero.comics.items}" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/listComicsLayout"
+                android:background="@color/colorPrimary" />
+
+            <RelativeLayout
+                android:id="@+id/listSeriesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/listComicsLabel"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                app:participation="@{viewModel.hero.comics.items}" />
+                android:layout_below="@+id/listComicsLayout"
+                android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/listSeriesLabel"
+                <TextView
+                    android:id="@+id/listSeriesLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/series"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <ListView
+                    android:id="@+id/listStories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/listSeriesLabel"
+                    android:layout_marginTop="10dp"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    app:participation="@{viewModel.hero.series.items}" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/listSeriesLayout"
+                android:background="@color/colorPrimary" />
+
+            <RelativeLayout
+                android:id="@+id/listStoriesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/listComics"
-                android:gravity="center"
-                android:text="@string/series"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                android:layout_below="@+id/listSeriesLayout"
+                android:layout_marginTop="10dp">
 
-            <ListView
-                android:id="@+id/listStories"
+                <TextView
+                    android:id="@+id/listStoriesLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/stories"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <ListView
+                    android:id="@+id/listSeries"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/listStoriesLabel"
+                    android:layout_marginTop="10dp"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    app:participation="@{viewModel.hero.stories.items}" />
+
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_below="@+id/listStoriesLayout"
+                android:background="@color/colorPrimary" />
+
+            <RelativeLayout
+                android:id="@+id/listEventsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/listSeriesLabel"
-                app:participation="@{viewModel.hero.series.items}" />
+                android:layout_below="@+id/listStoriesLayout"
+                android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/listStoriesLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/listStories"
-                android:gravity="center"
-                android:text="@string/stories"
-                android:textSize="25sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/listEventsLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/events"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-            <ListView
-                android:id="@+id/listSeries"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/listStoriesLabel"
-                app:participation="@{viewModel.hero.stories.items}" />
+                <ListView
 
-            <TextView
-                android:id="@+id/listEventsLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/listSeries"
-                android:gravity="center"
-                android:text="@string/events"
-                android:textSize="25sp"
-                android:textStyle="bold" />
-
-            <ListView
-                android:id="@+id/listEvents"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/listEventsLabel"
-                app:participation="@{viewModel.hero.events.items}" />
+                    android:id="@+id/listEvents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/listEventsLabel"
+                    android:layout_marginTop="10dp"
+                    android:divider="@null"
+                    android:dividerHeight="0dp"
+                    app:participation="@{viewModel.hero.events.items}" />
+            </RelativeLayout>
 
 
         </RelativeLayout>

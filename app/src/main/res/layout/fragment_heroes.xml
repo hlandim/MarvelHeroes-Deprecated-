@@ -19,11 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:orientation="vertical"
             android:visibility="@{safeUnbox(viewModel.isLoading) ?  View.VISIBLE : View.GONE}">
 
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/loadingGif"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView

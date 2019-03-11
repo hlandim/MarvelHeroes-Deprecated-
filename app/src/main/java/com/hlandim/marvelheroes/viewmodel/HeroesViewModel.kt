@@ -65,6 +65,7 @@ class HeroesViewModel(application: Application) :
         heroesCache = heroes.value!!.toMutableList()
         heroes.value = favoritesHeroes.value?.toMutableList()
         isShowingFavorite.value = true
+        isLoading.value = false
     }
 
     fun hideFavoritesHeroes() {
@@ -107,7 +108,7 @@ class HeroesViewModel(application: Application) :
         isLoading.value = true
         isEmptySearch.value = false
         isSearchingMode.value = true
-        requestNextSearchPage(query)
+        requestNextSearchPage(query.trim())
     }
 
     fun reload() {
