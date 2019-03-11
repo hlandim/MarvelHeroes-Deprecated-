@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">http://gateway.marvel.com</domain>
+        <domain includeSubdomains="true">https://gateway.marvel.com</domain>
+        <domain includeSubdomains="true">gateway.marvel.com</domain>
+        <domain includeSubdomains="true">http://i.annihil.us</domain>
+        <domain includeSubdomains="true">i.annihil.us</domain>
+    </domain-config>
+</network-security-config>
