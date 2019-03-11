@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.hlandim.marvelheroes.databinding.HeroParticipationListRowBinding
-import com.hlandim.marvelheroes.model.Participation
+import com.hlandim.marvelheroes.database.model.Participation
 
 class ParticipationAdapter(
     var list: List<Participation>,

@@ -7,7 +7,7 @@
 
         <variable
             name="hero"
-            type="com.hlandim.marvelheroes.model.Hero" />
+            type="com.hlandim.marvelheroes.database.model.Hero" />
 
         <import type="android.view.View" />
     </data>

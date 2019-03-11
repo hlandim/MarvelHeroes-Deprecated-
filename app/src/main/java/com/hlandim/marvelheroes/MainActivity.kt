@@ -1,6 +1,7 @@
 package com.hlandim.marvelheroes
 
 import android.app.SearchManager
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -16,6 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mViewModel: HeroesViewModel
     private lateinit var searchView: SearchView
+    private var showingFavorites = false
 
     companion object {
         const val FRAGMENT_TAG = "fragemnt_tag"
@@ -33,10 +35,42 @@ class MainActivity : AppCompatActivity() {
         } else {
             supportFragmentManager.beginTransaction().show(fragment).commit()
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.options_menu, menu)
+
+
+        configureFavoritesButton(menu)
+
+        configureSearchView(menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    private fun configureFavoritesButton(menu: Menu) {
+        val favoriteButton = menu.findItem(R.id.favorites)
+        favoriteButton.setOnMenuItemClickListener {
+            if (showingFavorites) {
+                mViewModel.hideFavoritesHeroes()
+                favoriteButton.setIcon(R.drawable.ic_star)
+            } else {
+                mViewModel.showFavoritesHeroes()
+                favoriteButton.setIcon(R.drawable.ic_star_filled)
+            }
+            showingFavorites = !showingFavorites
+            false
+        }
+
+        mViewModel.isSearchingMode.observe(this, Observer {
+            if (it!!) {
+                favoriteButton.setIcon(R.drawable.ic_star)
+            }
+        })
+    }
+
+    private fun configureSearchView(menu: Menu) {
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val menuItem = menu.findItem(R.id.search)
         searchView = menuItem.actionView as SearchView
@@ -50,14 +84,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                if (mViewModel.isSearchingMode || mViewModel.heroes.value.isNullOrEmpty()) {
+                if (mViewModel.isSearchingMode.value!! || mViewModel.heroes.value.isNullOrEmpty()) {
                     mViewModel.reload()
                 }
                 return true
             }
 
         })
-        return super.onCreateOptionsMenu(menu)
     }
 
 

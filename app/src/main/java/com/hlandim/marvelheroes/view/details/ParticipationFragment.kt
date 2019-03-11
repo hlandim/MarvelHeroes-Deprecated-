@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.hlandim.marvelheroes.databinding.FragmentParticipationDetailsBinding
-import com.hlandim.marvelheroes.model.Participation
+import com.hlandim.marvelheroes.database.model.Participation
 import com.hlandim.marvelheroes.viewmodel.HeroViewModel
 import kotlinx.android.synthetic.main.fragment_participation_details.*
 

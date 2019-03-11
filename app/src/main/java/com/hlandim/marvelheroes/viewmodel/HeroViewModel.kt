@@ -7,12 +7,11 @@ import android.view.View
 import com.hlandim.marvelheroes.R
 import com.hlandim.marvelheroes.database.AppDataBase
 import com.hlandim.marvelheroes.database.HeroesRepository
-import com.hlandim.marvelheroes.database.model.FavoriteHero
-import com.hlandim.marvelheroes.model.Hero
-import com.hlandim.marvelheroes.model.ResultParticipationResponse
+import com.hlandim.marvelheroes.database.model.Hero
 import com.hlandim.marvelheroes.util.Tags
 import com.hlandim.marvelheroes.util.androidThread
 import com.hlandim.marvelheroes.util.ioThread
+import com.hlandim.marvelheroes.web.ResultParticipationResponse
 import com.hlandim.marvelheroes.web.mavel.HeroesService
 import com.hlandim.marvelheroes.web.mavel.MarvelApi
 import io.reactivex.Observable
@@ -36,7 +35,10 @@ class HeroViewModel(application: Application) :
 
     init {
         val heroesService = HeroesService(MarvelApi.create())
-        heroesRepository = HeroesRepository(heroesService, AppDataBase.getDataBase(application).favoriteDao())
+        heroesRepository = HeroesRepository(
+            heroesService,
+            AppDataBase.getDataBase(application).favoriteDao()
+        )
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
@@ -77,9 +79,8 @@ class HeroViewModel(application: Application) :
 
     private fun insertFavoriteHero() {
         if (hero.value != null) {
-            val favorite = FavoriteHero(id = hero.value!!.id, hero = hero.value!!)
             val disposable =
-                Observable.fromCallable { heroesRepository.insertFavoriteHero(favorite) }
+                Observable.fromCallable { heroesRepository.insertFavoriteHero(hero.value!!) }
                     .subscribeOn(ioThread())
                     .observeOn(androidThread())
                     .subscribe({
@@ -95,9 +96,8 @@ class HeroViewModel(application: Application) :
 
     private fun removeFavoriteHero() {
         if (hero.value != null) {
-            val favorite = FavoriteHero(id = hero.value!!.id, hero = hero.value!!)
             val disposable =
-                Observable.fromCallable { heroesRepository.removerFavoriteHero(favorite) }
+                Observable.fromCallable { heroesRepository.removerFavoriteHero(hero.value!!) }
                     .subscribeOn(ioThread())
                     .observeOn(androidThread())
                     .subscribe({

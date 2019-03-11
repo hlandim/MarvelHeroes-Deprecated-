@@ -1,7 +1,7 @@
 package com.hlandim.marvelheroes.web.mavel
 
-import com.hlandim.marvelheroes.model.MarvelHeroResponses
-import com.hlandim.marvelheroes.model.MarvelParticipationResponses
+import com.hlandim.marvelheroes.web.MarvelHeroResponses
+import com.hlandim.marvelheroes.web.MarvelParticipationResponses
 import com.hlandim.marvelheroes.web.HeroesDataSource
 import io.reactivex.Observable
 

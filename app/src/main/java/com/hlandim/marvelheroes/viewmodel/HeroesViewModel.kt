@@ -6,12 +6,11 @@ import android.util.Log
 import com.hlandim.marvelheroes.R
 import com.hlandim.marvelheroes.database.AppDataBase
 import com.hlandim.marvelheroes.database.HeroesRepository
-import com.hlandim.marvelheroes.database.model.FavoriteHero
-import com.hlandim.marvelheroes.model.Hero
-import com.hlandim.marvelheroes.model.MarvelHeroResponses
+import com.hlandim.marvelheroes.database.model.Hero
 import com.hlandim.marvelheroes.util.Tags
 import com.hlandim.marvelheroes.util.androidThread
 import com.hlandim.marvelheroes.util.ioThread
+import com.hlandim.marvelheroes.web.MarvelHeroResponses
 import com.hlandim.marvelheroes.web.mavel.HeroesService
 import com.hlandim.marvelheroes.web.mavel.MarvelApi
 import io.reactivex.disposables.CompositeDisposable
@@ -29,19 +28,24 @@ class HeroesViewModel(application: Application) :
 
     val heroes: MutableLiveData<MutableList<Hero>> =
         MutableLiveData<MutableList<Hero>>().apply { value = mutableListOf() }
-    val favoritesHeroes: LiveData<List<FavoriteHero>>
+    var heroesCache: MutableList<Hero>? = mutableListOf()
+    val favoritesHeroes: LiveData<List<Hero>>
+    val isShowingFavorite: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val isEmptySearch: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val communicationError = MutableLiveData<String>()
     private val heroesRepository: HeroesRepository
-    var isSearchingMode = false
+    var isSearchingMode: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     private var searchQuery: String? = null
     private var pageCount: Int = 0
 
     init {
         RxJavaPlugins.setErrorHandler(this)
         val heroesService = HeroesService(MarvelApi.create())
-        heroesRepository = HeroesRepository(heroesService, AppDataBase.getDataBase(application).favoriteDao())
+        heroesRepository = HeroesRepository(
+            heroesService,
+            AppDataBase.getDataBase(application).favoriteDao()
+        )
         favoritesHeroes = heroesRepository.favorites
     }
 
@@ -57,9 +61,21 @@ class HeroesViewModel(application: Application) :
         requestNextHeroesPage()
     }
 
+    fun showFavoritesHeroes() {
+        heroesCache = heroes.value!!.toMutableList()
+        heroes.value = favoritesHeroes.value?.toMutableList()
+        isShowingFavorite.value = true
+    }
+
+    fun hideFavoritesHeroes() {
+        heroes.value?.clear()
+        heroes.value = heroesCache
+        isShowingFavorite.value = false
+    }
+
     fun requestNextHeroesPage() {
 
-        return if (isSearchingMode && searchQuery != null) {
+        return if (isSearchingMode.value!! && searchQuery != null) {
             requestNextSearchPage(searchQuery!!)
         } else {
             requestNextDefaultPage()
@@ -72,7 +88,6 @@ class HeroesViewModel(application: Application) :
             pageCount = 0
         }
         pageCount++
-        isSearchingMode = true
         searchQuery = query
         val disposable = heroesRepository.searchHero(query, pageCount)
             .subscribeOn(ioThread())
@@ -88,8 +103,10 @@ class HeroesViewModel(application: Application) :
     }
 
     fun searchHero(query: String) {
+        resetSearchVariables()
         isLoading.value = true
         isEmptySearch.value = false
+        isSearchingMode.value = true
         requestNextSearchPage(query)
     }
 
@@ -100,8 +117,8 @@ class HeroesViewModel(application: Application) :
     }
 
     private fun resetSearchVariables() {
-        if (isSearchingMode) {
-            isSearchingMode = false
+        if (isSearchingMode.value!!) {
+            isSearchingMode.value = false
         }
         pageCount = 0
         searchQuery = null

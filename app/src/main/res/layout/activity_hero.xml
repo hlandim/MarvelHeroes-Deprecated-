@@ -70,8 +70,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/fab_margin"
-                android:onClick="@{viewModel.changeFavoriteHero}"
-                app:imageResource="@{viewModel.fabResource}"
+                android:onClick="@{viewModel::changeFavoriteHero}"
+                app:imageResource="@{safeUnbox(viewModel.fabResource)}"
                 app:layout_anchor="@id/app_bar"
                 app:layout_anchorGravity="bottom|end" />
 

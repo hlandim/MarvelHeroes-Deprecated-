@@ -11,9 +11,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.hlandim.marvelheroes.database.model.Hero
 import com.hlandim.marvelheroes.databinding.FragmentHeroesBinding
 import com.hlandim.marvelheroes.databinding.HeroItemBinding
-import com.hlandim.marvelheroes.model.Hero
 import com.hlandim.marvelheroes.view.details.HeroActivity
 import com.hlandim.marvelheroes.viewmodel.HeroesViewModel
 
@@ -37,11 +37,13 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (!recyclerView.canScrollVertically(1)
-                    && !viewModel.isLoading.value!!
-                ) {
-                    binding.recyclerView.post { mAdapter.showLoading() }
-                    viewModel.requestNextHeroesPage()
+                if (!recyclerView.canScrollVertically(1)) {
+                    if (viewModel.isShowingFavorite.value!!) {
+                        binding.recyclerView.post { mAdapter.hideLoading() }
+                    } else if (!viewModel.isLoading.value!!) {
+                        binding.recyclerView.post { mAdapter.showLoading() }
+                        viewModel.requestNextHeroesPage()
+                    }
                 }
             }
         })
@@ -53,7 +55,13 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
         })
 
         viewModel.favoritesHeroes.observe(this, Observer {
+            //            it?.size
+        })
 
+        viewModel.isSearchingMode.observe(this, Observer {
+            if (it!!) {
+                mAdapter.forceClearList = true
+            }
         })
 
         binding.viewModel = viewModel

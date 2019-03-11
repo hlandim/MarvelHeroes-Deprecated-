@@ -5,15 +5,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.hlandim.marvelheroes.database.model.Hero
 import com.hlandim.marvelheroes.databinding.HeroItemBinding
 import com.hlandim.marvelheroes.databinding.RowLoadingBinding
-import com.hlandim.marvelheroes.model.Hero
 import kotlinx.android.synthetic.main.row_loading.view.*
 
 class HeroesAdapter(private var hereos: MutableList<Hero>) :
     RecyclerView.Adapter<HeroesAdapter.CustomViewHolder>() {
 
     lateinit var listener: ListListener
+    var forceClearList = false
 
     companion object {
         const val ITEM = 1
@@ -122,18 +123,24 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
         val noMoreResult = this.hereos == newHeroes
         val actualSize = hereos.size
         this.hereos = newHeroes
-        when {
-            noMoreResult -> notifyItemChanged(
-                actualSize,
-                FooterControl(
-                    showLoading = false,
-                    showNoMoreResult = true
+        if (forceClearList) {
+            notifyDataSetChanged()
+            forceClearList = false
+        } else {
+            when {
+                noMoreResult -> notifyItemChanged(
+                    actualSize,
+                    FooterControl(
+                        showLoading = false,
+                        showNoMoreResult = true
+                    )
                 )
-            )
-            actualSize == 0 -> notifyDataSetChanged()
-            newHeroes.size > actualSize -> notifyItemRangeChanged(actualSize, hereos.size - 1)
-            else -> notifyDataSetChanged()
+                actualSize == 0 -> notifyDataSetChanged()
+                newHeroes.size > actualSize -> notifyItemRangeChanged(actualSize, hereos.size - 1)
+                else -> notifyDataSetChanged()
+            }
         }
+
     }
 
     private data class FooterControl(val showLoading: Boolean, val showNoMoreResult: Boolean)

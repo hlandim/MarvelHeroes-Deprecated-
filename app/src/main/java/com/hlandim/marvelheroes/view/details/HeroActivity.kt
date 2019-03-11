@@ -18,10 +18,10 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.hlandim.marvelheroes.R
 import com.hlandim.marvelheroes.databinding.ActivityHeroBinding
-import com.hlandim.marvelheroes.model.Hero
-import com.hlandim.marvelheroes.model.Participation
-import com.hlandim.marvelheroes.model.ResultParticipationResponse
-import com.hlandim.marvelheroes.model.Thumbnail
+import com.hlandim.marvelheroes.database.model.Hero
+import com.hlandim.marvelheroes.database.model.Participation
+import com.hlandim.marvelheroes.web.ResultParticipationResponse
+import com.hlandim.marvelheroes.database.model.Thumbnail
 import com.hlandim.marvelheroes.util.getViewModel
 import com.hlandim.marvelheroes.viewmodel.HeroViewModel
 import kotlinx.android.synthetic.main.activity_hero.*
@@ -72,7 +72,10 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
     }
 
     override fun onParticipationClicked(participation: Participation) {
-        mViewModel.participation.value = ResultParticipationResponse(participation.name, "", Thumbnail("", ""))
+        mViewModel.participation.value = ResultParticipationResponse(
+            participation.name, "",
+            Thumbnail(0, "", "")
+        )
         val detailsFragment = ParticipationFragment.newInstance(participation)
         supportFragmentManager.beginTransaction().replace(R.id.fragment_details, detailsFragment, FRAGMENT_TAG).commit()
     }

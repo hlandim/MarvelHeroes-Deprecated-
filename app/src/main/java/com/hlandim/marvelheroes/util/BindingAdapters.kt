@@ -16,8 +16,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.hlandim.marvelheroes.R
-import com.hlandim.marvelheroes.model.Hero
-import com.hlandim.marvelheroes.model.Participation
+import com.hlandim.marvelheroes.database.model.Hero
+import com.hlandim.marvelheroes.database.model.Participation
 import com.hlandim.marvelheroes.view.details.ParticipationAdapter
 import com.hlandim.marvelheroes.view.list.HeroesAdapter
 

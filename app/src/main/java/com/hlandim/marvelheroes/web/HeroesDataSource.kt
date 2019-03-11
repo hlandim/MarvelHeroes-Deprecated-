@@ -1,7 +1,5 @@
 package com.hlandim.marvelheroes.web
 
-import com.hlandim.marvelheroes.model.MarvelParticipationResponses
-import com.hlandim.marvelheroes.model.MarvelHeroResponses
 import io.reactivex.Observable
 
 interface HeroesDataSource {

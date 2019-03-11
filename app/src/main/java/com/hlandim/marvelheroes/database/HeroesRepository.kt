@@ -3,19 +3,21 @@ package com.hlandim.marvelheroes.database
 import android.arch.lifecycle.LiveData
 import android.support.annotation.WorkerThread
 import com.hlandim.marvelheroes.database.dao.FavoriteDao
-import com.hlandim.marvelheroes.database.model.FavoriteHero
-import com.hlandim.marvelheroes.model.Hero
-import com.hlandim.marvelheroes.model.MarvelHeroResponses
-import com.hlandim.marvelheroes.model.MarvelParticipationResponses
+import com.hlandim.marvelheroes.database.model.Hero
+import com.hlandim.marvelheroes.web.MarvelHeroResponses
+import com.hlandim.marvelheroes.web.MarvelParticipationResponses
 import com.hlandim.marvelheroes.util.androidThread
 import com.hlandim.marvelheroes.util.ioThread
 import com.hlandim.marvelheroes.web.HeroesDataSource
 import io.reactivex.Observable
 
-class HeroesRepository(private val dataSource: HeroesDataSource, private val favoriteDao: FavoriteDao) :
+class HeroesRepository(
+    private val dataSource: HeroesDataSource,
+    private val favoriteDao: FavoriteDao
+) :
     HeroesDataSource {
 
-    val favorites: LiveData<List<FavoriteHero>> = favoriteDao.getAllFavoriteHeroes()
+    val favorites: LiveData<List<Hero>> = favoriteDao.getAllFavoriteHeroes()
 
     override fun getParticipationDetails(path: String): Observable<MarvelParticipationResponses> {
         return dataSource.getParticipationDetails(path)
@@ -39,20 +41,23 @@ class HeroesRepository(private val dataSource: HeroesDataSource, private val fav
     }
 
     @WorkerThread
-    fun insertFavoriteHero(favoriteHero: FavoriteHero) {
-        favoriteDao.insertFavoriteHero(favoriteHero)
+    fun insertFavoriteHero(hero: Hero) {
+        hero.favorite = true
+        favoriteDao.insertFavoriteHero(hero)
+
     }
 
     @WorkerThread
-    fun removerFavoriteHero(favoriteHero: FavoriteHero) {
-        favoriteDao.removerFavoriteHero(favoriteHero)
+    fun removerFavoriteHero(hero: Hero) {
+        hero.favorite = false
+        favoriteDao.removerFavoriteHero(hero)
+
     }
 
     private fun markFavoriteHeroes(heroes: List<Hero>) {
         val common = heroes.toMutableList()
-        val favorites = favorites.value?.map { it.hero }?.toMutableList()
-        if (!favorites.isNullOrEmpty()) {
-            common.retainAll(favorites)
+        if (!favorites.value.isNullOrEmpty()) {
+            common.retainAll(favorites.value!!)
             common.forEach { it.favorite = true }
         }
     }

@@ -1,8 +1,8 @@
 package com.hlandim.marvelheroes.web.mavel
 
 import com.google.gson.GsonBuilder
-import com.hlandim.marvelheroes.model.MarvelParticipationResponses
-import com.hlandim.marvelheroes.model.MarvelHeroResponses
+import com.hlandim.marvelheroes.web.MarvelParticipationResponses
+import com.hlandim.marvelheroes.web.MarvelHeroResponses
 import com.hlandim.marvelheroes.util.md5
 import io.reactivex.Observable
 import okhttp3.OkHttpClient

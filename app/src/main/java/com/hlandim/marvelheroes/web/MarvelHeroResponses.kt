@@ -1,6 +1,7 @@
-package com.hlandim.marvelheroes.model
+package com.hlandim.marvelheroes.web
 
-import java.io.Serializable
+import com.hlandim.marvelheroes.database.model.Hero
+import com.hlandim.marvelheroes.database.model.Thumbnail
 
 data class MarvelHeroResponses(
     val code: Int,
@@ -41,24 +42,4 @@ data class Comic(
     val description: String
 )
 
-class Thumbnail(
-    val path: String,
-    private val extension: String
-) : Serializable {
 
-    fun getFullThumbnailUrl(): String {
-        return "$path.$extension"
-    }
-}
-
-data class ParticipationResponse(
-    val available: Int,
-    val returned: Int,
-    val items: List<Participation>
-) : Serializable
-
-class Participation(
-    val resourceURI: String,
-    val name: String,
-    val description: String
-) : Serializable
