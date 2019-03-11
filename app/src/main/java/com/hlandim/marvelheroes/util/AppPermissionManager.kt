@@ -60,13 +60,13 @@ class AppPermissionManager(private val activity: Activity) {
             if (deniedCount == 0) {
                 onSuccess()
             } else {
-                for ((perName, permResult) in permissionsResult) {
+                for ((perName, _) in permissionsResult) {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(activity, perName)) {
                         showDialog("", "Esse app precisa de permissões para funcionar corretamente"
-                            , "Permitir", DialogInterface.OnClickListener { dialog, which ->
+                            , "Permitir", DialogInterface.OnClickListener { dialog, _ ->
                                 dialog.dismiss()
                                 checkAndRequestPermission()
-                            }, "Negar", DialogInterface.OnClickListener { dialog, which ->
+                            }, "Negar", DialogInterface.OnClickListener { dialog, _ ->
                                 dialog.dismiss()
                                 activity.finish()
                             }, false
@@ -76,7 +76,7 @@ class AppPermissionManager(private val activity: Activity) {
                             "",
                             "Você negou algumas permissões. Habilite as permissões em [Configurações] -> [Permissions]",
                             "Configurações",
-                            DialogInterface.OnClickListener { dialog, which ->
+                            DialogInterface.OnClickListener { _, _ ->
                                 val intent = Intent(
                                     Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                                     Uri.fromParts("package", activity.packageName, null)
@@ -86,7 +86,7 @@ class AppPermissionManager(private val activity: Activity) {
                                 activity.finish()
                             },
                             "Sair",
-                            DialogInterface.OnClickListener { dialog, which ->
+                            DialogInterface.OnClickListener { dialog, _ ->
                                 dialog.dismiss()
                                 activity.finish()
                             },
