@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
+import com.hlandim.marvelheroes.util.AppPermissionManager
 import com.hlandim.marvelheroes.util.getViewModel
 import com.hlandim.marvelheroes.view.list.HeroesFragment
 import com.hlandim.marvelheroes.viewmodel.HeroesViewModel
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mViewModel: HeroesViewModel
     private lateinit var searchView: SearchView
     private var showingFavorites = false
+    private val permissionManager = AppPermissionManager(this)
 
     companion object {
         const val FRAGMENT_TAG = "fragemnt_tag"
@@ -26,8 +28,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         mViewModel = createViewModel()
+        if (permissionManager.checkAndRequestPermission()) {
+            initApp()
+        }
+    }
+
+    private fun initApp() {
+
         val fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG)
         if (fragment == null) {
             supportFragmentManager.beginTransaction()
@@ -35,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             supportFragmentManager.beginTransaction().show(fragment).commit()
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -93,6 +100,13 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        permissionManager.handlePermissionResponse(requestCode, permissions, grantResults, {
+            initApp()
+        }, {})
+
+    }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
