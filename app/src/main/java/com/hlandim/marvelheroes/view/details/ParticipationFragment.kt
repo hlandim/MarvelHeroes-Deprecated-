@@ -30,9 +30,9 @@ class ParticipationFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mParticipation = arguments?.getParcelable("mParticipation") as Participation
         val binding = FragmentParticipationDetailsBinding.inflate(inflater, container, false)
-        val activity = this.activity
-        if (activity != null) {
-            val viewModel = ViewModelProviders.of(activity).get(HeroViewModel::class.java)
+
+        this.activity?.let {
+            val viewModel = ViewModelProviders.of(it).get(HeroViewModel::class.java)
             viewModel.getParticipationDetails(mParticipation.resourceURI)
 
             binding.lifecycleOwner = this

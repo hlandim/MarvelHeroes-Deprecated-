@@ -63,9 +63,8 @@ class HeroesViewModel(application: Application) :
     }
 
     fun showFavoritesHeroes() {
-        val heroes = heroes.value
-        if (heroes != null) {
-            heroesCache = heroes.toMutableList()
+        heroes.value?.let {
+            heroesCache = it.toMutableList()
         }
         this.heroes.value = favoritesHeroes.value?.toMutableList()
         isShowingFavorite.value = true
@@ -182,8 +181,8 @@ class HeroesViewModel(application: Application) :
     }
 
     override fun accept(t: Throwable?) {
-        if (t != null) {
-            handleCommunicationError(t)
+        t?.let {
+            handleCommunicationError(it)
         }
     }
 }

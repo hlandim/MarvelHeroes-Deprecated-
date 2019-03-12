@@ -47,7 +47,7 @@ class HeroViewModel(application: Application) :
     }
 
     private fun setFabIcon() {
-        if (hero.value != null) {
+        hero.value?.let {
             fabResource.value = hero.value?.getFavoriteImage()
         }
     }
@@ -79,10 +79,9 @@ class HeroViewModel(application: Application) :
     }
 
     private fun insertFavoriteHero() {
-        val hero = hero.value
-        if (hero != null) {
+        hero.value?.let {
             val disposable =
-                Observable.fromCallable { heroesRepository.insertFavoriteHero(hero) }
+                Observable.fromCallable { heroesRepository.insertFavoriteHero(it) }
                     .subscribeOn(ioThread())
                     .observeOn(androidThread())
                     .subscribe({
@@ -97,10 +96,9 @@ class HeroViewModel(application: Application) :
     }
 
     private fun removeFavoriteHero() {
-        val hero = hero.value
-        if (hero != null) {
+        hero.value?.let {
             val disposable =
-                Observable.fromCallable { heroesRepository.removerFavoriteHero(hero) }
+                Observable.fromCallable { heroesRepository.removerFavoriteHero(it) }
                     .subscribeOn(ioThread())
                     .observeOn(androidThread())
                     .subscribe({

@@ -43,8 +43,8 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
         setSupportActionBar(toolbar)
         val binding = DataBindingUtil.setContentView<ActivityHeroBinding>(this, R.layout.activity_hero)
         var hero = intent?.extras?.getParcelable("hero") as Hero
-        if (savedInstanceState != null) {
-            hero = savedInstanceState.getParcelable("hero") as Hero
+        savedInstanceState?.let {
+            hero = it.getParcelable("hero") as Hero
         }
         mViewModel = createViewModel()
 
@@ -152,7 +152,7 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
         } else {
             val position = intent?.extras?.getInt("position")
             val bundle = Bundle().apply {
-                if (position != null) {
+                position?.let {
                     putInt("position", position)
                 }
                 putParcelable("hero", mViewModel.hero.value)

@@ -32,9 +32,9 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentHeroesBinding.inflate(inflater, container, false)
-        val activity = this.activity
-        if (activity != null) {
-            val viewModel = ViewModelProviders.of(activity).get(HeroesViewModel::class.java)
+
+        activity?.let {
+            val viewModel = ViewModelProviders.of(it).get(HeroesViewModel::class.java)
             mAdapter = HeroesAdapter(emptyList<Hero>().toMutableList())
             mAdapter.listener = this
             binding.lifecycleOwner = this
@@ -75,6 +75,7 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
 
             binding.viewModel = viewModel
         }
+
         return binding.root
     }
 
@@ -92,23 +93,21 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
             putParcelable("hero", hero)
             putInt("position", position)
         }
-        val myActivity = activity
-        if (myActivity != null) {
+
+        activity?.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    myActivity,
+                    it,
                     binding.posterImageView,
                     binding.posterImageView.transitionName
                 ).toBundle()
-
-
-                Intent(myActivity, HeroActivity::class.java)
+                Intent(it, HeroActivity::class.java)
                     .putExtras(bundle)
                     .let {
                         startActivityForResult(it, REQUEST_CODE, options)
                     }
             } else {
-                Intent(myActivity, HeroActivity::class.java)
+                Intent(it, HeroActivity::class.java)
                     .putExtras(bundle)
                     .let {
                         startActivityForResult(it, REQUEST_CODE)
