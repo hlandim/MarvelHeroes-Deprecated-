@@ -112,6 +112,7 @@ class HeroesViewModel(application: Application) :
         isLoading.value = true
         isEmptySearch.value = false
         isSearchingMode.value = true
+        isShowingFavorite.value = false
         requestNextSearchPage(query.trim())
     }
 

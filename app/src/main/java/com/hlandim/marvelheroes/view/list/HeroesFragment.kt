@@ -49,7 +49,7 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
                         val isLoading = viewModel.isLoading.value
                         if (isShowingFavorite != null && isShowingFavorite) {
                             binding.recyclerView.post { mAdapter.hideLoading() }
-                        } else if (isLoading != null && isLoading) {
+                        } else if (isLoading != null && !isLoading) {
                             binding.recyclerView.post { mAdapter.showLoading() }
                             viewModel.requestNextHeroesPage()
                         }
