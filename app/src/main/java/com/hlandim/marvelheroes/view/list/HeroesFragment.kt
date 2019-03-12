@@ -40,6 +40,7 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
             binding.lifecycleOwner = this
             this.lifecycle.addObserver(viewModel)
             binding.recyclerView.adapter = mAdapter
+
             binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)

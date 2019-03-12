@@ -5,7 +5,6 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.transition.ChangeBounds
 import android.transition.ChangeImageTransform
@@ -72,19 +71,6 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
         configureListHeight(binding.heroContent.listEvents)
         configureListHeight(binding.heroContent.listSeries)
         configureListHeight(binding.heroContent.listStories)
-
-        val transitionName = ViewCompat.getTransitionName(binding.posterImageView)
-        if (transitionName != null) {
-            binding.posterImageView.setOnClickListener {
-                supportFragmentManager.beginTransaction()
-                    .addSharedElement(binding.posterImageView, transitionName)
-                    .addToBackStack(FRAGMENT_IMAGE_TAG)
-                    .replace(R.id.fragment_hero_image, HeroImageFragment(), FRAGMENT_IMAGE_TAG)
-                    .commit()
-
-            }
-        }
-
     }
 
     private fun configureListHeight(list: ListView) {
@@ -166,7 +152,7 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
         } else {
             val position = intent?.extras?.getInt("position")
             val bundle = Bundle().apply {
-                if(position != null ) {
+                if (position != null) {
                     putInt("position", position)
                 }
                 putParcelable("hero", mViewModel.hero.value)

@@ -34,7 +34,7 @@ class HeroesViewModel(application: Application) :
     val isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val isEmptySearch: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val communicationError = MutableLiveData<String>()
-    private val heroesRepository: HeroesRepository
+    var heroesRepository: HeroesRepository
     var isSearchingMode: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     private var searchQuery: String? = null
     private var pageCount: Int = 0
