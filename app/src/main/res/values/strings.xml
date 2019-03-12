@@ -18,4 +18,6 @@
     <string name="stories">Stories</string>
     <string name="events">Events</string>
     <string name="favorites">Favoritos</string>
+    <string name="hero_resource_uri">Hero resourceURI</string>
+    <string name="modified">Modificado:\u0020</string>
 </resources>

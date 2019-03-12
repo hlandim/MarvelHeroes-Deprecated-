@@ -21,13 +21,12 @@ interface MarvelApi {
     companion object {
 
         const val URL = "http://gateway.marvel.com/v1/public/"
-        const val API_KEY_PRIVATE = "3274ea7e32afc7d375f8a219258a856414fec465"
+        private const val API_KEY_PRIVATE = "3274ea7e32afc7d375f8a219258a856414fec465"
         const val API_KEY_PUBLIC = "e1b13260fe6e390810479686622d590c"
         const val LIMIT_RESULT_SIZE = 20
 
         fun create(): MarvelApi {
 
-            val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssz").create()
             val logging = HttpLoggingInterceptor()
             logging.level = HttpLoggingInterceptor.Level.BODY
             val httpClient = OkHttpClient.Builder()
@@ -35,7 +34,7 @@ interface MarvelApi {
             val retrofit = Retrofit.Builder()
                 .baseUrl(URL)
                 .client(OkHttpClient.Builder().build())
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(httpClient.build())
                 .build()

@@ -1,11 +1,10 @@
 package com.hlandim.marvelheroes.database.model
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Embedded
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.*
 import com.hlandim.marvelheroes.R
 import java.io.Serializable
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Entity(tableName = "hero")
 class Hero(
@@ -14,6 +13,8 @@ class Hero(
     var id: Int = 0,
     @ColumnInfo(name = "name")
     var name: String,
+    @ColumnInfo(name = "modified")
+    var modified: String,
     @Embedded
     var thumbnail: Thumbnail,
     @ColumnInfo(name = "resourceURI")
@@ -34,6 +35,7 @@ class Hero(
 
             this(
                 0,
+                "",
                 "",
                 Thumbnail(0, "", ""),
                 "",
@@ -61,5 +63,11 @@ class Hero(
         } else {
             R.drawable.ic_star
         }
+    }
+
+    fun getModifiedString(): String? {
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz", Locale.getDefault())
+        val formatNew = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return formatNew.format(format.parse(modified))
     }
 }

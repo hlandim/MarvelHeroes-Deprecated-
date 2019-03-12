@@ -10,6 +10,8 @@
             type="com.hlandim.marvelheroes.database.model.Hero" />
 
         <import type="android.view.View" />
+
+        <import type="android.text.TextUtils" />
     </data>
 
     <android.support.v7.widget.CardView
@@ -28,6 +30,7 @@
         <RelativeLayout
             android:id="@+id/contentLayout"
             android:layout_width="match_parent"
+            android:padding="5dp"
             android:layout_height="wrap_content">
 
             <ImageView
@@ -56,6 +59,32 @@
                 android:textStyle="bold"
                 tools:text="@{hero.name}" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/titleTextView"
+                android:layout_alignParentBottom="true"
+                android:layout_toStartOf="@+id/imgFavorite"
+                android:layout_toEndOf="@id/posterImageView"
+                android:orientation="horizontal"
+                android:visibility="@{!TextUtils.isEmpty(hero.modified) ? View.VISIBLE: View.GONE}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/modified"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{hero.getModifiedString}"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+
             <ImageView
                 android:id="@+id/imgFavorite"
                 android:layout_width="wrap_content"
@@ -63,9 +92,9 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
+                android:contentDescription="@null"
                 android:visibility="@{hero.favorite ? View.VISIBLE : View.GONE}"
-                app:imageResource="@{hero.getFavoriteImage}"
-                android:contentDescription="@null" />
+                app:imageResource="@{hero.getFavoriteImage}" />
 
         </RelativeLayout>
 

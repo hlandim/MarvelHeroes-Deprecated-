@@ -24,10 +24,19 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tvResourceUri"
+                android:id="@+id/tvResourceUriLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:text="@string/hero_resource_uri" />
+
+            <TextView
+                android:id="@+id/tvResourceUri"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvResourceUriLabel"
                 android:text="@{viewModel.hero.resourceURI}" />
 
 
