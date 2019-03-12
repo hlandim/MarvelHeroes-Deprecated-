@@ -48,7 +48,7 @@ class HeroViewModel(application: Application) :
 
     private fun setFabIcon() {
         if (hero.value != null) {
-            fabResource.value = hero.value!!.getFavoriteImage()
+            fabResource.value = hero.value?.getFavoriteImage()
         }
     }
 
@@ -74,17 +74,19 @@ class HeroViewModel(application: Application) :
     }
 
     fun changeFavoriteHero(view: View) {
-        if (hero.value!!.favorite) removeFavoriteHero() else insertFavoriteHero()
+        val hero = hero.value
+        if (hero != null && hero.favorite) removeFavoriteHero() else insertFavoriteHero()
     }
 
     private fun insertFavoriteHero() {
-        if (hero.value != null) {
+        val hero = hero.value
+        if (hero != null) {
             val disposable =
-                Observable.fromCallable { heroesRepository.insertFavoriteHero(hero.value!!) }
+                Observable.fromCallable { heroesRepository.insertFavoriteHero(hero) }
                     .subscribeOn(ioThread())
                     .observeOn(androidThread())
                     .subscribe({
-                        hero.value!!.favorite = true
+                        this.hero.value?.favorite = true
                         fabResource.value = R.drawable.ic_star_filled
                     }, {
                         handlerError(it)
@@ -95,13 +97,14 @@ class HeroViewModel(application: Application) :
     }
 
     private fun removeFavoriteHero() {
-        if (hero.value != null) {
+        val hero = hero.value
+        if (hero != null) {
             val disposable =
-                Observable.fromCallable { heroesRepository.removerFavoriteHero(hero.value!!) }
+                Observable.fromCallable { heroesRepository.removerFavoriteHero(hero) }
                     .subscribeOn(ioThread())
                     .observeOn(androidThread())
                     .subscribe({
-                        hero.value!!.favorite = false
+                        this.hero.value?.favorite = false
                         fabResource.value = R.drawable.ic_star
                     }, {
                         handlerError(it)

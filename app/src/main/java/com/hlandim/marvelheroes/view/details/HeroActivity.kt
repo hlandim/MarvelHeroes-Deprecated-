@@ -5,6 +5,7 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.transition.ChangeBounds
 import android.transition.ChangeImageTransform
@@ -19,13 +20,13 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.hlandim.marvelheroes.R
-import com.hlandim.marvelheroes.databinding.ActivityHeroBinding
 import com.hlandim.marvelheroes.database.model.Hero
 import com.hlandim.marvelheroes.database.model.Participation
-import com.hlandim.marvelheroes.web.ResultParticipationResponse
 import com.hlandim.marvelheroes.database.model.Thumbnail
+import com.hlandim.marvelheroes.databinding.ActivityHeroBinding
 import com.hlandim.marvelheroes.util.getViewModel
 import com.hlandim.marvelheroes.viewmodel.HeroViewModel
+import com.hlandim.marvelheroes.web.ResultParticipationResponse
 import kotlinx.android.synthetic.main.activity_hero.*
 
 class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationListener {
@@ -34,16 +35,17 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
     lateinit var mViewModel: HeroViewModel
 
     companion object {
-        const val FRAGMENT_TAG = "participation_fragment"
+        const val FRAGMENT_PARTICIPATION_TAG = "participation_fragment"
+        const val FRAGMENT_IMAGE_TAG = "image_fragment"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(toolbar)
         val binding = DataBindingUtil.setContentView<ActivityHeroBinding>(this, R.layout.activity_hero)
-        var hero = intent?.extras?.getSerializable("hero") as Hero
+        var hero = intent?.extras?.getParcelable("hero") as Hero
         if (savedInstanceState != null) {
-            hero = savedInstanceState.getSerializable("hero") as Hero
+            hero = savedInstanceState.getParcelable("hero") as Hero
         }
         mViewModel = createViewModel()
 
@@ -71,6 +73,18 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
         configureListHeight(binding.heroContent.listSeries)
         configureListHeight(binding.heroContent.listStories)
 
+        val transitionName = ViewCompat.getTransitionName(binding.posterImageView)
+        if (transitionName != null) {
+            binding.posterImageView.setOnClickListener {
+                supportFragmentManager.beginTransaction()
+                    .addSharedElement(binding.posterImageView, transitionName)
+                    .addToBackStack(FRAGMENT_IMAGE_TAG)
+                    .replace(R.id.fragment_hero_image, HeroImageFragment(), FRAGMENT_IMAGE_TAG)
+                    .commit()
+
+            }
+        }
+
     }
 
     private fun configureListHeight(list: ListView) {
@@ -89,7 +103,7 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState?.putSerializable("hero", mViewModel.hero.value)
+        outState?.putParcelable("hero", mViewModel.hero.value)
         super.onSaveInstanceState(outState)
     }
 
@@ -99,7 +113,8 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
             Thumbnail(0, "", "")
         )
         val detailsFragment = ParticipationFragment.newInstance(participation)
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_details, detailsFragment, FRAGMENT_TAG).commit()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_details, detailsFragment, FRAGMENT_PARTICIPATION_TAG).commit()
     }
 
 
@@ -145,13 +160,16 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
     }
 
     override fun onBackPressed() {
-        val fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_TAG)
+        val fragment = supportFragmentManager.findFragmentByTag(FRAGMENT_PARTICIPATION_TAG)
         if (fragment != null) {
             (fragment as ParticipationFragment).startCloseAnimation()
         } else {
+            val position = intent?.extras?.getInt("position")
             val bundle = Bundle().apply {
-                putInt("position", intent?.extras?.getInt("position")!!)
-                putSerializable("hero", mViewModel.hero.value)
+                if(position != null ) {
+                    putInt("position", position)
+                }
+                putParcelable("hero", mViewModel.hero.value)
             }
             val intent = Intent().apply {
                 putExtras(bundle)

@@ -1,8 +1,9 @@
 package com.hlandim.marvelheroes.database.model
 
 import android.arch.persistence.room.*
+import android.os.Parcel
+import android.os.Parcelable
 import com.hlandim.marvelheroes.database.Converter
-import java.io.Serializable
 
 
 @Entity(tableName = "thumbnail")
@@ -11,13 +12,39 @@ class Thumbnail(
     @ColumnInfo(name = "thumbnail_id")
     var id: Int,
     @ColumnInfo(name = "path")
-    val path: String,
+    var path: String?,
     @ColumnInfo(name = "extension")
-    val extension: String
-) : Serializable {
+    var extension: String?
+) : Parcelable {
+
+    constructor(parcel: Parcel) : this(
+        parcel.readInt(),
+        parcel.readString(),
+        parcel.readString()
+    )
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(id)
+        dest?.writeString(path)
+        dest?.writeString(extension)
+    }
+
+    override fun describeContents(): Int {
+        return 0//To change body of created functions use File | Settings | File Templates.
+    }
 
     fun getFullThumbnailUrl(): String {
         return "$path.$extension"
+    }
+
+    companion object CREATOR : Parcelable.Creator<Thumbnail> {
+        override fun createFromParcel(parcel: Parcel): Thumbnail {
+            return Thumbnail(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Thumbnail?> {
+            return arrayOfNulls(size)
+        }
     }
 }
 
@@ -40,8 +67,41 @@ class ParticipationResponse(
     var heroId: Int,
     @TypeConverters(Converter::class)
     var items: List<Participation> = emptyList()
-) : Serializable {
+) : Parcelable {
+
+    constructor(parcel: Parcel) : this(
+        parcel.readInt(),
+        parcel.readInt(),
+        parcel.readInt(),
+        parcel.readInt(),
+        arrayListOf<Participation>().apply {
+            parcel.readList(this, Participation::class.java.classLoader)
+        }
+    )
+
+    override fun writeToParcel(dest: Parcel?, flags: Int) {
+        dest?.writeInt(id)
+        dest?.writeInt(available)
+        dest?.writeInt(returned)
+        dest?.writeInt(heroId)
+        dest?.writeList(items)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
     constructor() : this(0, 0, 0, 0, emptyList())
+
+    companion object CREATOR : Parcelable.Creator<ParticipationResponse> {
+        override fun createFromParcel(parcel: Parcel): ParticipationResponse {
+            return ParticipationResponse(parcel)
+        }
+
+        override fun newArray(size: Int): Array<ParticipationResponse?> {
+            return arrayOfNulls(size)
+        }
+    }
 }
 
 @Entity(
@@ -64,4 +124,34 @@ class Participation(
     var description: String?,
     @ColumnInfo(name = "participation_response_id")
     var participationResponseId: Int
-) : Serializable
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readInt(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readInt()
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(resourceURI)
+        parcel.writeString(name)
+        parcel.writeString(description)
+        parcel.writeInt(participationResponseId)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Participation> {
+        override fun createFromParcel(parcel: Parcel): Participation {
+            return Participation(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Participation?> {
+            return arrayOfNulls(size)
+        }
+    }
+}

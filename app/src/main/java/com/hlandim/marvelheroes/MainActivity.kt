@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         mViewModel.isSearchingMode.observe(this, Observer {
-            if (it!!) {
+            if (it != null && it) {
                 favoriteButton.setIcon(R.drawable.ic_star)
             }
         })
@@ -91,7 +91,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                if (mViewModel.isSearchingMode.value!! || mViewModel.heroes.value.isNullOrEmpty()) {
+                val isSearchingMode = mViewModel.isSearchingMode.value
+                if (isSearchingMode != null && isSearchingMode || mViewModel.heroes.value.isNullOrEmpty()) {
                     mViewModel.reload()
                 }
                 return true
@@ -116,8 +117,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleIntent(intent: Intent) {
-
-        if (Intent.ACTION_SEARCH == intent.action && !mViewModel.isLoading.value!!) {
+        val isLoading = mViewModel.isLoading.value
+        if (Intent.ACTION_SEARCH == intent.action && isLoading != null && !isLoading) {
             val query = intent.getStringExtra(SearchManager.QUERY)
             mViewModel.searchHero(query)
 

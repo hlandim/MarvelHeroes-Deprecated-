@@ -4,11 +4,11 @@ import android.arch.lifecycle.LiveData
 import android.support.annotation.WorkerThread
 import com.hlandim.marvelheroes.database.dao.FavoriteDao
 import com.hlandim.marvelheroes.database.model.Hero
-import com.hlandim.marvelheroes.web.MarvelHeroResponses
-import com.hlandim.marvelheroes.web.MarvelParticipationResponses
 import com.hlandim.marvelheroes.util.androidThread
 import com.hlandim.marvelheroes.util.ioThread
 import com.hlandim.marvelheroes.web.HeroesDataSource
+import com.hlandim.marvelheroes.web.MarvelHeroResponses
+import com.hlandim.marvelheroes.web.MarvelParticipationResponses
 import io.reactivex.Observable
 
 class HeroesRepository(
@@ -56,8 +56,9 @@ class HeroesRepository(
 
     private fun markFavoriteHeroes(heroes: List<Hero>) {
         val common = heroes.toMutableList()
-        if (!favorites.value.isNullOrEmpty()) {
-            common.retainAll(favorites.value!!)
+        val favorites = favorites.value
+        if (!favorites.isNullOrEmpty()) {
+            common.retainAll(favorites)
             common.forEach { it.favorite = true }
         }
     }

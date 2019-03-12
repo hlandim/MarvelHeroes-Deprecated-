@@ -32,43 +32,48 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding = FragmentHeroesBinding.inflate(inflater, container, false)
-        val viewModel = ViewModelProviders.of(this.activity!!).get(HeroesViewModel::class.java)
-        mAdapter = HeroesAdapter(emptyList<Hero>().toMutableList())
-        mAdapter.listener = this
-        binding.lifecycleOwner = this
-        this.lifecycle.addObserver(viewModel)
-        binding.recyclerView.adapter = mAdapter
-        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (!recyclerView.canScrollVertically(1)) {
-                    if (viewModel.isShowingFavorite.value!!) {
-                        binding.recyclerView.post { mAdapter.hideLoading() }
-                    } else if (!viewModel.isLoading.value!!) {
-                        binding.recyclerView.post { mAdapter.showLoading() }
-                        viewModel.requestNextHeroesPage()
+        val activity = this.activity
+        if (activity != null) {
+            val viewModel = ViewModelProviders.of(activity).get(HeroesViewModel::class.java)
+            mAdapter = HeroesAdapter(emptyList<Hero>().toMutableList())
+            mAdapter.listener = this
+            binding.lifecycleOwner = this
+            this.lifecycle.addObserver(viewModel)
+            binding.recyclerView.adapter = mAdapter
+            binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (!recyclerView.canScrollVertically(1) && viewModel.isShowingFavorite.value != null) {
+                        val isShowingFavorite = viewModel.isShowingFavorite.value
+                        val isLoading = viewModel.isLoading.value
+                        if (isShowingFavorite != null && isShowingFavorite) {
+                            binding.recyclerView.post { mAdapter.hideLoading() }
+                        } else if (isLoading != null && isLoading) {
+                            binding.recyclerView.post { mAdapter.showLoading() }
+                            viewModel.requestNextHeroesPage()
+                        }
                     }
                 }
-            }
-        })
+            })
 
-        viewModel.isLoading.observe(this, Observer {
-            if (it!!) {
-                binding.recyclerView.layoutManager?.scrollToPosition(0)
-            }
-        })
+            viewModel.isLoading.observe(this, Observer {
+                if (it != null && it) {
+                    binding.recyclerView.layoutManager?.scrollToPosition(0)
+                }
+            })
 
-        viewModel.favoritesHeroes.observe(this, Observer {
-            //            it?.size
-        })
+            viewModel.favoritesHeroes.observe(this, Observer {
+                //            it?.size
+            })
 
-        viewModel.isSearchingMode.observe(this, Observer {
-            if (it!!) {
-                mAdapter.forceClearList = true
-            }
-        })
+            viewModel.isSearchingMode.observe(this, Observer {
+                if (it != null && it) {
+                    mAdapter.forceClearList = true
+                }
+            })
 
-        binding.viewModel = viewModel
+            binding.viewModel = viewModel
+        }
         return binding.root
     }
 
@@ -83,25 +88,26 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
 
     override fun onRowClicked(binding: HeroItemBinding, hero: Hero, position: Int) {
         val bundle = Bundle().apply {
-            putSerializable("hero", hero)
+            putParcelable("hero", hero)
             putInt("position", position)
         }
-        if (activity != null) {
+        val myActivity = activity
+        if (myActivity != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    activity!!,
+                    myActivity,
                     binding.posterImageView,
                     binding.posterImageView.transitionName
                 ).toBundle()
 
 
-                Intent(activity, HeroActivity::class.java)
+                Intent(myActivity, HeroActivity::class.java)
                     .putExtras(bundle)
                     .let {
                         startActivityForResult(it, REQUEST_CODE, options)
                     }
             } else {
-                Intent(activity, HeroActivity::class.java)
+                Intent(myActivity, HeroActivity::class.java)
                     .putExtras(bundle)
                     .let {
                         startActivityForResult(it, REQUEST_CODE)
@@ -114,9 +120,9 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE) {
             val position = data?.getIntExtra("position", -1)
-            val hero = data?.getSerializableExtra("hero")
+            val hero = data?.getParcelableExtra<Hero>("hero")
             if (hero != null && position != null && position > -1) {
-                mAdapter.updateItem(hero as Hero, position)
+                mAdapter.updateItem(hero, position)
             }
 
         }

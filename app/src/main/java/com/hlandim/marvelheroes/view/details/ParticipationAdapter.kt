@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.hlandim.marvelheroes.databinding.HeroParticipationListRowBinding
 import com.hlandim.marvelheroes.database.model.Participation
+import com.hlandim.marvelheroes.databinding.HeroParticipationListRowBinding
 
 class ParticipationAdapter(
     var list: List<Participation>,
@@ -17,7 +17,7 @@ class ParticipationAdapter(
         val holder: ViewHolder
         val rowView: View
         if (convertView == null) {
-            val layoutInflater = LayoutInflater.from(parent!!.context)
+            val layoutInflater = LayoutInflater.from(parent?.context)
             val binding = HeroParticipationListRowBinding.inflate(layoutInflater, parent, false)
             holder = ViewHolder(binding)
             rowView = binding.root

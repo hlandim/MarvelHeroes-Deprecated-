@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
-import com.hlandim.marvelheroes.databinding.FragmentParticipationDetailsBinding
 import com.hlandim.marvelheroes.database.model.Participation
+import com.hlandim.marvelheroes.databinding.FragmentParticipationDetailsBinding
 import com.hlandim.marvelheroes.viewmodel.HeroViewModel
 import kotlinx.android.synthetic.main.fragment_participation_details.*
 
@@ -21,19 +21,23 @@ class ParticipationFragment : Fragment() {
         fun newInstance(participation: Participation): ParticipationFragment {
             return ParticipationFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable("mParticipation", participation)
+                    putParcelable("mParticipation", participation)
                 }
             }
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mParticipation = arguments?.getSerializable("mParticipation") as Participation
-        val viewModel = ViewModelProviders.of(this.activity!!).get(HeroViewModel::class.java)
-        viewModel.getParticipationDetails(mParticipation.resourceURI)
+        mParticipation = arguments?.getParcelable("mParticipation") as Participation
         val binding = FragmentParticipationDetailsBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        val activity = this.activity
+        if (activity != null) {
+            val viewModel = ViewModelProviders.of(activity).get(HeroViewModel::class.java)
+            viewModel.getParticipationDetails(mParticipation.resourceURI)
+
+            binding.lifecycleOwner = this
+            binding.viewModel = viewModel
+        }
         return binding.root
     }
 
@@ -54,12 +58,13 @@ class ParticipationFragment : Fragment() {
     }
 
     fun startCloseAnimation() {
+        val activity = this.activity
         if (isAdded && activity != null) {
             YoYo.with(Techniques.SlideOutDown).onEnd {
                 content.visibility = View.INVISIBLE
                 YoYo.with(Techniques.FadeOut).onEnd {
                     overlay.visibility = View.INVISIBLE
-                    activity!!.supportFragmentManager.beginTransaction().remove(this).commit()
+                    activity.supportFragmentManager.beginTransaction().remove(this).commit()
                 }.duration(200).playOn(overlay)
             }.duration(200).playOn(content)
         }

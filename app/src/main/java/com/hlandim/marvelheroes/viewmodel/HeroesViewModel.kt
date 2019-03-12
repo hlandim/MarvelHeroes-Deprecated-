@@ -28,7 +28,7 @@ class HeroesViewModel(application: Application) :
 
     val heroes: MutableLiveData<MutableList<Hero>> =
         MutableLiveData<MutableList<Hero>>().apply { value = mutableListOf() }
-    var heroesCache: MutableList<Hero>? = mutableListOf()
+    private var heroesCache: MutableList<Hero>? = mutableListOf()
     val favoritesHeroes: LiveData<List<Hero>>
     val isShowingFavorite: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
@@ -51,7 +51,8 @@ class HeroesViewModel(application: Application) :
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun load() {
-        if (heroes.value!!.isEmpty()) {
+        val heroes = heroes.value
+        if (heroes != null && heroes.isEmpty()) {
             getFirstPage()
         }
     }
@@ -62,8 +63,11 @@ class HeroesViewModel(application: Application) :
     }
 
     fun showFavoritesHeroes() {
-        heroesCache = heroes.value!!.toMutableList()
-        heroes.value = favoritesHeroes.value?.toMutableList()
+        val heroes = heroes.value
+        if (heroes != null) {
+            heroesCache = heroes.toMutableList()
+        }
+        this.heroes.value = favoritesHeroes.value?.toMutableList()
         isShowingFavorite.value = true
         isLoading.value = false
     }
@@ -75,9 +79,10 @@ class HeroesViewModel(application: Application) :
     }
 
     fun requestNextHeroesPage() {
-
-        return if (isSearchingMode.value!! && searchQuery != null) {
-            requestNextSearchPage(searchQuery!!)
+        val isSearching = isSearchingMode.value
+        val searchQuery = searchQuery
+        return if (isSearching != null && isSearching && searchQuery != null) {
+            requestNextSearchPage(searchQuery)
         } else {
             requestNextDefaultPage()
         }
@@ -113,13 +118,14 @@ class HeroesViewModel(application: Application) :
 
     fun reload() {
         resetSearchVariables()
-        heroes.value!!.clear()
+        heroes.value?.clear()
         load()
     }
 
     private fun resetSearchVariables() {
-        if (isSearchingMode.value!!) {
-            isSearchingMode.value = false
+        val isSearchingMode = isSearchingMode.value
+        if (isSearchingMode != null && isSearchingMode) {
+            this.isSearchingMode.value = false
         }
         pageCount = 0
         searchQuery = null
@@ -148,11 +154,11 @@ class HeroesViewModel(application: Application) :
     }
 
     private fun handleResponse(it: MarvelHeroResponses) {
-        val finalList = heroes.value!!.toMutableList()
+        val finalList = heroes.value?.toMutableList()
         if (pageCount == 1) {
-            finalList.clear()
+            finalList?.clear()
         }
-        finalList.addAll(it.data.results)
+        finalList?.addAll(it.data.results)
         heroes.value = finalList
         communicationError.value = null
         isEmptySearch.value = finalList.isNullOrEmpty()
