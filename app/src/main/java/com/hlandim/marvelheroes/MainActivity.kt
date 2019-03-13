@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var searchView: SearchView
     private var showingFavorites = false
     private val permissionManager = AppPermissionManager(this)
+    private lateinit var mFavoriteButton: MenuItem
 
     companion object {
         const val FRAGMENT_TAG = "fragemnt_tag"
@@ -57,14 +58,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun configureFavoritesButton(menu: Menu) {
-        val favoriteButton = menu.findItem(R.id.favorites)
-        favoriteButton.setOnMenuItemClickListener {
+        mFavoriteButton = menu.findItem(R.id.favorites)
+        mFavoriteButton.setOnMenuItemClickListener {
             if (showingFavorites) {
                 mViewModel.hideFavoritesHeroes()
-                favoriteButton.setIcon(R.drawable.ic_star)
+                setFavoriteButtonImg(R.drawable.ic_star)
             } else {
                 mViewModel.showFavoritesHeroes()
-                favoriteButton.setIcon(R.drawable.ic_star_filled)
+                setFavoriteButtonImg(R.drawable.ic_star_filled)
             }
             showingFavorites = !showingFavorites
             false
@@ -72,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
         mViewModel.isSearchingMode.observe(this, Observer {
             if (it != null && it) {
-                favoriteButton.setIcon(R.drawable.ic_star)
+                setFavoriteButtonImg(R.drawable.ic_star)
             }
         })
     }
@@ -93,12 +94,18 @@ class MainActivity : AppCompatActivity() {
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                 val isSearchingMode = mViewModel.isSearchingMode.value
                 if (isSearchingMode != null && isSearchingMode || mViewModel.heroes.value.isNullOrEmpty()) {
+                    setFavoriteButtonImg(R.drawable.ic_star)
+                    showingFavorites = false
                     mViewModel.reload()
                 }
                 return true
             }
 
         })
+    }
+
+    private fun setFavoriteButtonImg(res: Int) {
+        mFavoriteButton.setIcon(res)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

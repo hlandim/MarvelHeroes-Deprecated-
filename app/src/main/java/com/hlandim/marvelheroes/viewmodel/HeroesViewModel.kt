@@ -118,6 +118,7 @@ class HeroesViewModel(application: Application) :
 
     fun reload() {
         resetSearchVariables()
+        isShowingFavorite.value = false
         heroes.value?.clear()
         load()
     }
