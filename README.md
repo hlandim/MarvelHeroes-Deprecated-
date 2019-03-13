@@ -1,11 +1,15 @@
 # MarvelHeroes
 
 Architecture
+MVVM
 ![alt tag](/imgs/googleArchitecture.png)
 
 - Cominication between View <-> ViewModel are made using DataBinding and LiveData. 
 - Using [ROOM](https://developer.android.com/topic/libraries/architecture/room) to save/remove favorites heroes.
 - Using [Glide](https://github.com/bumptech/glide) to download and cache images.
+- Using [Retrofit](https://square.github.io/retrofit/) to create interfaces with MarvelApi.
+- Using [Mockito](https://github.com/mockito/mockito) to create tests.
+- Using [Gson](https://github.com/google/gson) to make MarvelApi json response parse.
 - Handling network conection lost.
 - Avoiding lost data when configurations changes.
 - Heroes list paginations with UI feedbacks.
