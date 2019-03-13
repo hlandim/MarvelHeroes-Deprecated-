@@ -48,3 +48,8 @@ Tests:
 - [HeroViewModelTest](app/src/test/java/com/hlandim/marvelheroes/viewmodel/HeroViewModelTest.kt) -> Tests for mark/unmark favorite hero.
 
 
+Screens
+
+<p align="center">
+  ![alt tag](/imgs/googleArchitecture.png)
+</p>
