@@ -76,9 +76,9 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/imgPoster"
+                    android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true">
+                    android:layout_toEndOf="@+id/imgPoster">
 
                     <TextView
                         android:id="@+id/imgBackLabel"

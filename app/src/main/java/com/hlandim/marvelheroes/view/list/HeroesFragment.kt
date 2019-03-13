@@ -57,8 +57,8 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
                 }
             })
 
-            viewModel.isLoading.observe(this, Observer {
-                if (it != null && it) {
+            viewModel.isLoading.observe(this, Observer { isLoading ->
+                if (isLoading != null && isLoading) {
                     binding.recyclerView.layoutManager?.scrollToPosition(0)
                 }
             })
@@ -67,8 +67,8 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
                 //            it?.size
             })
 
-            viewModel.isSearchingMode.observe(this, Observer {
-                if (it != null && it) {
+            viewModel.isSearchingMode.observe(this, Observer { isSearchingMode ->
+                if (isSearchingMode != null && isSearchingMode) {
                     mAdapter.forceClearList = true
                 }
             })
@@ -103,14 +103,14 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
                 ).toBundle()
                 Intent(it, HeroActivity::class.java)
                     .putExtras(bundle)
-                    .let {
-                        startActivityForResult(it, REQUEST_CODE, options)
+                    .let { intent ->
+                        startActivityForResult(intent, REQUEST_CODE, options)
                     }
             } else {
                 Intent(it, HeroActivity::class.java)
                     .putExtras(bundle)
-                    .let {
-                        startActivityForResult(it, REQUEST_CODE)
+                    .let { intent ->
+                        startActivityForResult(intent, REQUEST_CODE)
                     }
             }
         }

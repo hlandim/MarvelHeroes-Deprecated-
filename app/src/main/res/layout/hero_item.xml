@@ -30,8 +30,8 @@
         <RelativeLayout
             android:id="@+id/contentLayout"
             android:layout_width="match_parent"
-            android:padding="5dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="5dp">
 
             <ImageView
                 android:id="@+id/posterImageView"
@@ -64,11 +64,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/titleTextView"
                 android:layout_alignParentBottom="true"
+                android:layout_marginStart="8dp"
                 android:layout_marginBottom="10dp"
                 android:layout_toStartOf="@+id/imgFavorite"
                 android:layout_toEndOf="@id/posterImageView"
                 android:orientation="horizontal"
-                android:layout_marginStart="8dp"
                 android:visibility="@{!TextUtils.isEmpty(hero.modified) ? View.VISIBLE: View.GONE}">
 
                 <TextView

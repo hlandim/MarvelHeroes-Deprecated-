@@ -1,8 +1,8 @@
 package com.hlandim.marvelheroes.web.mavel
 
+import com.hlandim.marvelheroes.web.HeroesDataSource
 import com.hlandim.marvelheroes.web.MarvelHeroResponses
 import com.hlandim.marvelheroes.web.MarvelParticipationResponses
-import com.hlandim.marvelheroes.web.HeroesDataSource
 import io.reactivex.Observable
 
 class HeroesService(private val api: MarvelApi) : HeroesDataSource {

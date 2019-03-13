@@ -59,6 +59,7 @@
                 </android.support.design.widget.CollapsingToolbarLayout>
             </android.support.design.widget.AppBarLayout>
 
+
             <include
                 android:id="@+id/heroContent"
                 layout="@layout/content_hero"
@@ -74,7 +75,6 @@
                 app:imageResource="@{safeUnbox(viewModel.fabResource)}"
                 app:layout_anchor="@id/app_bar"
                 app:layout_anchorGravity="bottom|end" />
-
 
         </android.support.design.widget.CoordinatorLayout>
 

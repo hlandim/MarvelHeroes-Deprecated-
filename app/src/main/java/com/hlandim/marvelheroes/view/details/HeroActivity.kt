@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
+import android.support.transition.TransitionInflater
 import android.support.v7.app.AppCompatActivity
 import android.transition.ChangeBounds
 import android.transition.ChangeImageTransform
@@ -24,9 +26,11 @@ import com.hlandim.marvelheroes.database.model.Participation
 import com.hlandim.marvelheroes.database.model.Thumbnail
 import com.hlandim.marvelheroes.databinding.ActivityHeroBinding
 import com.hlandim.marvelheroes.util.getViewModel
+import com.hlandim.marvelheroes.view.details.HeroImageFragment.HeroImageFragmentTransition
 import com.hlandim.marvelheroes.viewmodel.HeroViewModel
 import com.hlandim.marvelheroes.web.ResultParticipationResponse
 import kotlinx.android.synthetic.main.activity_hero.*
+
 
 class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationListener {
 
@@ -138,8 +142,30 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
             .apply(RequestOptions.bitmapTransform(RoundedCorners(14)))
             .apply(requestOptions)
             .into(binding.posterImageView)
+
+        configureImageClick(hero, binding)
     }
 
+    private fun configureImageClick(
+        hero: Hero,
+        binding: ActivityHeroBinding
+    ) {
+        val fragment = HeroImageFragment.newInstance(hero.thumbnail.getFullThumbnailUrl())
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            fragment.sharedElementEnterTransition = HeroImageFragmentTransition()
+            fragment.enterTransition = TransitionInflater.from(this).inflateTransition(android.R.transition.fade)
+            fragment.sharedElementReturnTransition = HeroImageFragmentTransition()
+        }
+
+        binding.posterImageView.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .addSharedElement(it, "heroImage")
+                .replace(R.id.fragment_hero_image, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
 
     private fun createViewModel(): HeroViewModel {
         return getViewModel { HeroViewModel(application) }
