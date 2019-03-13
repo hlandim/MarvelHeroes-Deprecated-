@@ -50,7 +50,7 @@ Tests:
 
 # Screens
 
-Listing Heroes             |  Searching Heroes         |Listing Heroes             |Listing Heroes              
+ Listing heroes             |  Hero details             | Searching Hero             | Listing favorites heroes              
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------
   <img src="https://github.com/hlandim/MarvelHeroes/blob/development/imgs/listing.gif" width="180" height="320">  |    <img src="https://github.com/hlandim/MarvelHeroes/blob/development/imgs/hero_details.gif" width="180" height="320">  |    <img src="https://github.com/hlandim/MarvelHeroes/blob/development/imgs/searching.gif" width="180" height="320">  |    <img src="https://github.com/hlandim/MarvelHeroes/blob/development/imgs/favorites.gif" width="180" height="320">
 
