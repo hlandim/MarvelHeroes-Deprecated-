@@ -46,8 +46,8 @@ class HeroesViewModelTest {
         whenever(application.applicationContext).thenReturn(application)
 
         val heroesViewModel = HeroesViewModel(application)
-
         heroesViewModel.heroesRepository = heroesRepository
+
         heroesViewModel.load()
 
         Assert.assertEquals(heroes, heroesViewModel.heroes.value)
@@ -65,7 +65,7 @@ class HeroesViewModelTest {
 
         val heroesViewModel = HeroesViewModel(application)
         heroesViewModel.heroesRepository = heroesRepository
-        
+
         heroesViewModel.searchHero(heroName)
 
         Assert.assertEquals(1, heroesViewModel.heroes.value?.size)

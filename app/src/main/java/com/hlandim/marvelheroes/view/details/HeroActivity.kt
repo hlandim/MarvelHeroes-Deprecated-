@@ -161,7 +161,7 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
         binding.posterImageView.setOnClickListener {
             supportFragmentManager.beginTransaction()
                 .addSharedElement(it, "heroImage")
-                .replace(R.id.fragment_hero_image, fragment)
+                .replace(R.id.fragment_hero_image, fragment, FRAGMENT_IMAGE_TAG)
                 .addToBackStack(null)
                 .commit()
         }

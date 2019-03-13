@@ -39,23 +39,8 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
             mAdapter.listener = this
             binding.lifecycleOwner = this
             this.lifecycle.addObserver(viewModel)
-            binding.recyclerView.adapter = mAdapter
 
-            binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (!recyclerView.canScrollVertically(1) && viewModel.isShowingFavorite.value != null) {
-                        val isShowingFavorite = viewModel.isShowingFavorite.value
-                        val isLoading = viewModel.isLoading.value
-                        if (isShowingFavorite != null && isShowingFavorite) {
-                            binding.recyclerView.post { mAdapter.hideLoading() }
-                        } else if (isLoading != null && !isLoading) {
-                            binding.recyclerView.post { mAdapter.showLoading() }
-                            viewModel.requestNextHeroesPage()
-                        }
-                    }
-                }
-            })
+            configureHeroesList(binding, viewModel)
 
             viewModel.isLoading.observe(this, Observer { isLoading ->
                 if (isLoading != null && isLoading) {
@@ -79,6 +64,28 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
         return binding.root
     }
 
+    private fun configureHeroesList(
+        binding: FragmentHeroesBinding,
+        viewModel: HeroesViewModel
+    ) {
+        binding.recyclerView.adapter = mAdapter
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (!recyclerView.canScrollVertically(1) && viewModel.isShowingFavorite.value != null) {
+                    val isShowingFavorite = viewModel.isShowingFavorite.value
+                    val isLoading = viewModel.isLoading.value
+                    if (isShowingFavorite != null && isShowingFavorite) {
+                        binding.recyclerView.post { mAdapter.hideLoading() }
+                    } else if (isLoading != null && !isLoading) {
+                        binding.recyclerView.post { mAdapter.showLoading() }
+                        viewModel.requestNextHeroesPage()
+                    }
+                }
+            }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Glide.with(this)
@@ -89,6 +96,14 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
     }
 
     override fun onRowClicked(binding: HeroItemBinding, hero: Hero, position: Int) {
+        callHeroDetails(hero, position, binding)
+    }
+
+    private fun callHeroDetails(
+        hero: Hero,
+        position: Int,
+        binding: HeroItemBinding
+    ) {
         val bundle = Bundle().apply {
             putParcelable("hero", hero)
             putInt("position", position)

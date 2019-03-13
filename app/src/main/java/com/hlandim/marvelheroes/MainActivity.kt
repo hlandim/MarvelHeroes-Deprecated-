@@ -94,14 +94,18 @@ class MainActivity : AppCompatActivity() {
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                 val isSearchingMode = mViewModel.isSearchingMode.value
                 if (isSearchingMode != null && isSearchingMode || mViewModel.heroes.value.isNullOrEmpty()) {
-                    setFavoriteButtonImg(R.drawable.ic_star)
-                    showingFavorites = false
-                    mViewModel.reload()
+                    restartList()
                 }
                 return true
             }
 
         })
+    }
+
+    private fun restartList() {
+        setFavoriteButtonImg(R.drawable.ic_star)
+        showingFavorites = false
+        mViewModel.reload()
     }
 
     private fun setFavoriteButtonImg(res: Int) {
