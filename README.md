@@ -1,4 +1,11 @@
-# MarvelHeroes
+# Marvel Heroes
+
+## Simple app that consuming [Marvel Api](https://developer.marvel.com/)
+### Main features:
+- List Heroes
+- Search hero
+- Hero Details
+- Mark Hero favorite
 
 Architecture
 MVVM
