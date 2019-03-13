@@ -31,3 +31,6 @@ Web:
 - [MarvelApi](app/src/main/java/com/hlandim/marvelheroes/web/mavel/MarvelApi.kt) -> Interface responsable for retrofit configuration and Marvel Api endpoints.
 - [HeroesService](app/src/main/java/com/hlandim/marvelheroes/web/mavel/HeroesService.kt) -> Responsable for use MarvelApi to make call to the endpoints.
 
+Tests:
+- [HeroesViewModelTest](app/src/test/java/com/hlandim/marvelheroes/viewmodel/HeroesViewModelTest.kt) -> Tests for getHeroes, searchHero and showFavoritesHeroes
+- [HeroViewModelTest](app/src/test/java/com/hlandim/marvelheroes/viewmodel/HeroViewModelTest.kt) -> Tests for mark/unmark favorite hero.
