@@ -1,8 +1,23 @@
 <resources>
-    <string name="app_name">MarvelHeroes</string>
+    <string name="app_name">Marvel Heroes</string>
     <string name="communication_error">Falha na comunicação com o servidor</string>
     <string name="network_error">Verifique sua conexão</string>
     <string name="unknown_error">Erro desconhecido</string>
     <string name="invalid_parameters_error">Erro ao enviar a requisição, verifique os parâmetros enviados</string>
     <string name="empty_response">Nenhum resultado encontrado</string>
+    <string name="search_title">Marvel Heroes</string>
+    <string name="search_hint">Encontre seu herói</string>
+    <string name="thumbnails">Thumbnails</string>
+    <string name="no_more_results">Sem mais Heróis</string>
+    <string name="hero_not_found">Herói não encontrado</string>
+    <string name="sad_image">sad_image</string>
+    <string name="title_activity_hero">HeroActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="comics">Comics</string>
+    <string name="series">Series</string>
+    <string name="stories">Stories</string>
+    <string name="events">Events</string>
+    <string name="favorites">Favoritos</string>
+    <string name="hero_resource_uri">Hero resourceURI</string>
+    <string name="modified">Modificado:\u0020</string>
 </resources>
