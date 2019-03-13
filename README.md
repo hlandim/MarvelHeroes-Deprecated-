@@ -48,8 +48,10 @@ Tests:
 - [HeroViewModelTest](app/src/test/java/com/hlandim/marvelheroes/viewmodel/HeroViewModelTest.kt) -> Tests for mark/unmark favorite hero.
 
 
-Screens
+# Screens
 
-<p align="center">
-  ![alt tag](/imgs/googleArchitecture.png)
-</p>
+Listing Heroes             |  Searching Heroes         |Listing Heroes             |Listing Heroes              
+:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------
+  <img src="https://github.com/hlandim/MarvelHeroes/blob/development/imgs/listing.gif" width="180" height="320">  |    <img src="https://github.com/hlandim/MarvelHeroes/blob/development/imgs/hero_details.gif" width="180" height="320">  |    <img src="https://github.com/hlandim/MarvelHeroes/blob/development/imgs/searching.gif" width="180" height="320">  |    <img src="https://github.com/hlandim/MarvelHeroes/blob/development/imgs/favorites.gif" width="180" height="320">
+
+
