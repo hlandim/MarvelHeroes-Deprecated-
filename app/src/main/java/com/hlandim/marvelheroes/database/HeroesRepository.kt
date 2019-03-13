@@ -13,7 +13,7 @@ import io.reactivex.Observable
 
 class HeroesRepository(
     private val dataSource: HeroesDataSource,
-    private val favoriteDao: FavoriteDao
+    var favoriteDao: FavoriteDao
 ) :
     HeroesDataSource {
 

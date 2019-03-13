@@ -31,7 +31,7 @@ class HeroViewModel(application: Application) :
     val isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val participation: MutableLiveData<ResultParticipationResponse> = MutableLiveData()
     val communicationError = MutableLiveData<String>()
-    private val heroesRepository: HeroesRepository
+    var heroesRepository: HeroesRepository
 
     init {
         val heroesService = HeroesService(MarvelApi.create())
@@ -73,7 +73,7 @@ class HeroViewModel(application: Application) :
 
     }
 
-    fun changeFavoriteHero(view: View) {
+    fun changeFavoriteHero(view: View?) {
         val hero = hero.value
         if (hero != null && hero.favorite) removeFavoriteHero() else insertFavoriteHero()
     }
