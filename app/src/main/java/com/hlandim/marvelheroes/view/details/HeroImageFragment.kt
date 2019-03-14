@@ -40,6 +40,10 @@ class HeroImageFragment : Fragment() {
                 loadImage(binding, imageUrl)
             }
 
+            binding.rootLayout.setOnClickListener {
+                activity?.onBackPressed()
+            }
+
         }
 
         return binding.root
