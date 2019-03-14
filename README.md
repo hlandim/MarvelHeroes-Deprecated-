@@ -2,7 +2,7 @@
 
 ## Simple app that consuming [Marvel Api](https://developer.marvel.com/)
 
-[Apk](https://drive.google.com/open?id=1_bGH295fUg9EW-UKInXt7qiUwsIx4yZg)
+[Marvel Heroes Apk](https://drive.google.com/open?id=1_bGH295fUg9EW-UKInXt7qiUwsIx4yZg)
 
 ### Main features:
 - List Heroes
