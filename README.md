@@ -8,7 +8,7 @@
 - List Heroes
 - Search hero
 - Hero Details
-- Mark Hero favorite
+- Mark your favorite heroes.
 
 Architecture
 MVVM
