@@ -60,12 +60,11 @@ Tests:
 
  Listing heroes             |  Hero details             | Searching Hero             | Listing favorites heroes              
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------
-  <img src=\"https://github.com/hlandim/MarvelHeroes/blob/development/imgs/listing.gif\" width=\"180\" height=\"320\">  |    <img src=\"https://github.com/hlandim/MarvelHeroes/blob/development/imgs/hero_details.gif\" width=\"180\" height=\"320\">  |    <img src=\"https://github.com/hlandim/MarvelHeroes/blob/development/imgs/searching.gif\" width=\"180\" height=\"320\">  |    <img src=\"https://github.com/hlandim/MarvelHeroes/blob/development/imgs/favorites.gif\" width=\"180\" height=\"320\">
-
+<img src="https://github.com/hlandim/MarvelHeroes/blob/development/imgs/listing.gif" width="180" height="320">  |    <img src="https://github.com/hlandim/MarvelHeroes/blob/development/imgs/hero_details.gif" width="180" height="320">  |    <img src="https://github.com/hlandim/MarvelHeroes/blob/development/imgs/searching.gif" width="180" height="320">  |    <img src="https://github.com/hlandim/MarvelHeroes/blob/development/imgs/favorites.gif" width="180" height="320">
 
 
 <p>
  <h3>Gif used in loading requests</h3>
-  <img src=\"https://github.com/hlandim/MarvelHeroes/blob/development/app/src/main/res/raw/search_hero_loading.gif\" width=\"300\" height=\"178\">
+  <img src="https://github.com/hlandim/MarvelHeroes/blob/development/app/src/main/res/raw/search_hero_loading.gif" width="300" height="178">
   <h1>Thanks</h1>
 </p>
