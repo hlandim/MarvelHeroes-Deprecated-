@@ -63,7 +63,7 @@ Tests:
 
  Listing heroes             |  Hero details             | Searching Hero             | Listing favorites heroes              
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------
-<img src="https://github.com/hlandim/MarvelHeroes/tree/master/imgs/imgs/listing.gif" width="180" height="320">  |    <img src="https://github.com/hlandim/MarvelHeroes/tree/master/imgs/imgs/hero_details.gif" width="180" height="320">  |    <img src="https://github.com/hlandim/MarvelHeroes/tree/master/imgs/imgs/searching.gif" width="180" height="320">  |    <img src="imgs/favorites.gif" width="180" height="320">
+<img src="imgs/listing.gif" width="180" height="320">  |    <img src="imgs/hero_details.gif" width="180" height="320">  |    <img src="imgs/searching.gif" width="180" height="320">  |    <img src="imgs/favorites.gif" width="180" height="320">
 
 
 <p>
