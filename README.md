@@ -69,5 +69,4 @@ Tests:
 <p>
  <h3>Gif used in loading requests</h3>
   <img src="https://github.com/hlandim/MarvelHeroes/blob/development/app/src/main/res/raw/search_hero_loading.gif" width="300" height="178">
-  <h1>Thanks</h1>
 </p>
