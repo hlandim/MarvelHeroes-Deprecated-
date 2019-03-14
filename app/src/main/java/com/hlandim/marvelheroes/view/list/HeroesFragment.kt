@@ -17,14 +17,19 @@ import com.hlandim.marvelheroes.R
 import com.hlandim.marvelheroes.database.model.Hero
 import com.hlandim.marvelheroes.databinding.FragmentHeroesBinding
 import com.hlandim.marvelheroes.databinding.HeroItemBinding
+import com.hlandim.marvelheroes.util.androidThread
+import com.hlandim.marvelheroes.util.ioThread
 import com.hlandim.marvelheroes.view.details.HeroActivity
 import com.hlandim.marvelheroes.viewmodel.HeroesViewModel
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_heroes.*
 
 
 class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
 
     lateinit var mAdapter: HeroesAdapter
+    lateinit var mViewModel: HeroesViewModel
+    private val compositeDisposable = CompositeDisposable()
 
     companion object {
         const val REQUEST_CODE = 111
@@ -34,31 +39,31 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
         val binding = FragmentHeroesBinding.inflate(inflater, container, false)
 
         activity?.let {
-            val viewModel = ViewModelProviders.of(it).get(HeroesViewModel::class.java)
+            mViewModel = ViewModelProviders.of(it).get(HeroesViewModel::class.java)
             mAdapter = HeroesAdapter(emptyList<Hero>().toMutableList())
             mAdapter.listener = this
             binding.lifecycleOwner = this
-            this.lifecycle.addObserver(viewModel)
+            this.lifecycle.addObserver(mViewModel)
 
-            configureHeroesList(binding, viewModel)
+            configureHeroesList(binding, mViewModel)
 
-            viewModel.isLoading.observe(this, Observer { isLoading ->
+            mViewModel.isLoading.observe(this, Observer { isLoading ->
                 if (isLoading != null && isLoading) {
                     binding.recyclerView.layoutManager?.scrollToPosition(0)
                 }
             })
 
-            viewModel.favoritesHeroes.observe(this, Observer {
+            mViewModel.favoritesHeroes.observe(this, Observer {
                 //            it?.size
             })
 
-            viewModel.isSearchingMode.observe(this, Observer { isSearchingMode ->
+            mViewModel.isSearchingMode.observe(this, Observer { isSearchingMode ->
                 if (isSearchingMode != null && isSearchingMode) {
                     mAdapter.forceClearList = true
                 }
             })
 
-            binding.viewModel = viewModel
+            binding.viewModel = mViewModel
         }
 
         return binding.root
@@ -99,6 +104,16 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
         callHeroDetails(hero, position, binding)
     }
 
+    override fun onFavoriteClicked(hero: Hero, position: Int) {
+        val disposable =
+            mViewModel.changeFavoriteHero(hero)?.subscribeOn(ioThread())?.observeOn(androidThread())?.subscribe {
+                mAdapter.notifyItemChanged(position)
+            }
+
+        disposable?.let { compositeDisposable.add(it) }
+
+    }
+
     private fun callHeroDetails(
         hero: Hero,
         position: Int,
@@ -129,6 +144,11 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
                     }
             }
         }
+    }
+
+    override fun onDestroy() {
+        compositeDisposable.clear()
+        super.onDestroy()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

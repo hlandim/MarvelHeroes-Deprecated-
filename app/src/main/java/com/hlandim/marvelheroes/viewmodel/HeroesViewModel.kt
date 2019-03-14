@@ -13,6 +13,7 @@ import com.hlandim.marvelheroes.util.ioThread
 import com.hlandim.marvelheroes.web.MarvelHeroResponses
 import com.hlandim.marvelheroes.web.mavel.HeroesService
 import com.hlandim.marvelheroes.web.mavel.MarvelApi
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.plugins.RxJavaPlugins
@@ -152,6 +153,31 @@ class HeroesViewModel(application: Application) :
         Log.w(Tags.COMMUNICATION_ERROR, it.message)
         handleCommunicationError(it)
         isLoading.value = false
+    }
+
+    fun changeFavoriteHero(hero: Hero): Observable<Unit>? {
+        return if (hero.favorite) removeFavoriteHero(hero) else insertFavoriteHero(hero)
+    }
+
+    private fun insertFavoriteHero(hero: Hero): Observable<Unit>? {
+
+        return Observable.fromCallable { heroesRepository.insertFavoriteHero(hero) }
+            .subscribeOn(ioThread())
+            .observeOn(androidThread())
+            .doOnError {
+                handlerError(it)
+            }
+
+
+    }
+
+    private fun removeFavoriteHero(hero: Hero): Observable<Unit>? {
+        return Observable.fromCallable { heroesRepository.removerFavoriteHero(hero) }
+            .subscribeOn(ioThread())
+            .observeOn(androidThread())
+            .doOnError {
+                handlerError(it)
+            }
     }
 
     private fun handleResponse(it: MarvelHeroResponses) {

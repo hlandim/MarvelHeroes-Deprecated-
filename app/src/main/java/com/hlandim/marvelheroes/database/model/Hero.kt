@@ -10,6 +10,7 @@ import com.hlandim.marvelheroes.R
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 @Entity(tableName = "hero")
 class Hero(
     @PrimaryKey
@@ -109,11 +110,11 @@ class Hero(
         return id + 30
     }
 
-    fun getFavoriteImage(): Int {
-        return if (favorite) {
-            R.drawable.ic_star_filled
-        } else {
-            R.drawable.ic_star
+    fun getFavoriteImage(fromList: Boolean): Int {
+        return when {
+            favorite -> R.drawable.ic_star_filled
+            fromList -> R.drawable.ic_star_list
+            else -> R.drawable.ic_star
         }
     }
 

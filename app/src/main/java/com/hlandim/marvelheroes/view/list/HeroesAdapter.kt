@@ -56,11 +56,14 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         if (position < hereos.size) {
-            val movie = hereos[position]
+            val hero = hereos[position]
             val rowHolder = holder as ViewHolder
-            rowHolder.bind(movie)
+            rowHolder.bind(hero)
             rowHolder.itemView.setOnClickListener {
-                listener.onRowClicked(rowHolder.binding, movie, position)
+                listener.onRowClicked(rowHolder.binding, hero, position)
+            }
+            rowHolder.binding.imgFavorite.setOnClickListener {
+                listener.onFavoriteClicked(hero, position)
             }
         }
     }
@@ -112,6 +115,7 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
 
     interface ListListener {
         fun onRowClicked(binding: HeroItemBinding, hero: Hero, position: Int)
+        fun onFavoriteClicked(hero: Hero, position: Int)
     }
 
     fun updateItem(hero: Hero, position: Int) {

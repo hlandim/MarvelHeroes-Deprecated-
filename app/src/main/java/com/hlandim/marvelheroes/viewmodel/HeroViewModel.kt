@@ -48,7 +48,7 @@ class HeroViewModel(application: Application) :
 
     private fun setFabIcon() {
         hero.value?.let {
-            fabResource.value = hero.value?.getFavoriteImage()
+            fabResource.value = hero.value?.getFavoriteImage(false)
         }
     }
 
@@ -85,8 +85,9 @@ class HeroViewModel(application: Application) :
                     .subscribeOn(ioThread())
                     .observeOn(androidThread())
                     .subscribe({
-                        this.hero.value?.favorite = true
-                        fabResource.value = R.drawable.ic_star_filled
+                        hero.value?.let {
+                            updateFabImage(it)
+                        }
                     }, {
                         handlerError(it)
                     })
@@ -102,13 +103,18 @@ class HeroViewModel(application: Application) :
                     .subscribeOn(ioThread())
                     .observeOn(androidThread())
                     .subscribe({
-                        this.hero.value?.favorite = false
-                        fabResource.value = R.drawable.ic_star
+                        hero.value?.let {
+                            updateFabImage(it)
+                        }
                     }, {
                         handlerError(it)
                     })
             compositeDisposable.add(disposable)
         }
+    }
+
+    private fun updateFabImage(it: Hero) {
+        fabResource.value = it.getFavoriteImage(false)
     }
 
     override fun onCleared() {

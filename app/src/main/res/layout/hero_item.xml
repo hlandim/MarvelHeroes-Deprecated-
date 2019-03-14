@@ -93,11 +93,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_centerVertical="true"
+                android:visibility="visible"
                 android:layout_marginEnd="10dp"
                 android:contentDescription="@null"
-                android:visibility="@{hero.favorite ? View.VISIBLE : View.GONE}"
-                app:imageResource="@{hero.getFavoriteImage}" />
+                android:src="@drawable/ic_star_list"
+                app:imageResource="@{hero.getFavoriteImage(true)}" />
 
         </RelativeLayout>
 
