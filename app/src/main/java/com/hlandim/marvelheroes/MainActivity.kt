@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mFavoriteButton: MenuItem
 
     companion object {
-        const val FRAGMENT_TAG = "fragemnt_tag"
+        const val FRAGMENT_TAG = "fragment_tag"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +47,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.options_menu, menu)
 
+        menuInflater.inflate(R.menu.options_menu, menu)
 
         configureFavoritesButton(menu)
 
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         mViewModel.isSearchingMode.observe(this, Observer {
-            if (it != null && it) {
+            it?.let {
                 setFavoriteButtonImg(R.drawable.ic_star)
             }
         })

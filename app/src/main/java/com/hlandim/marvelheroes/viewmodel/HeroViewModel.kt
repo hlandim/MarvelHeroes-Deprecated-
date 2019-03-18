@@ -119,7 +119,7 @@ class HeroViewModel(application: Application) :
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.clear()
+        compositeDisposable.dispose()
     }
 
 
