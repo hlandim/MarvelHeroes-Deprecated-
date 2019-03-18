@@ -20,4 +20,10 @@
     <string name="favorites">Favoritos</string>
     <string name="hero_resource_uri">Hero resourceURI</string>
     <string name="modified">Modificado:\u0020</string>
+    <string name="app_permissions_needed">Esse app precisa de permissões para funcionar corretamente</string>
+    <string name="app_permissions_denied">Você negou algumas permissões. Habilite as permissões em [Configurações] -> [Permissions]</string>
+    <string name="allow">Permitir</string>
+    <string name="deny">Negar</string>
+    <string name="configurations">Configurações</string>
+    <string name="exit">Sair</string>
 </resources>

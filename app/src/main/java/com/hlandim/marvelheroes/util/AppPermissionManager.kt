@@ -10,6 +10,7 @@ import android.net.Uri
 import android.provider.Settings
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import com.hlandim.marvelheroes.R
 
 
 class AppPermissionManager(private val activity: Activity) {
@@ -52,7 +53,7 @@ class AppPermissionManager(private val activity: Activity) {
 
             grantResults.forEachIndexed { index, i ->
                 if (i == PackageManager.PERMISSION_DENIED) {
-                    permissionsResult.put(permissions[index], i)
+                    permissionsResult[permissions[index]] = i
                     deniedCount++
                 }
             }
@@ -62,11 +63,11 @@ class AppPermissionManager(private val activity: Activity) {
             } else {
                 for ((perName, _) in permissionsResult) {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(activity, perName)) {
-                        showDialog("", "Esse app precisa de permissões para funcionar corretamente"
-                            , "Permitir", DialogInterface.OnClickListener { dialog, _ ->
+                        showDialog("", activity.getString(R.string.app_permissions_needed)
+                            , activity.getString(R.string.allow), DialogInterface.OnClickListener { dialog, _ ->
                                 dialog.dismiss()
                                 checkAndRequestPermission()
-                            }, "Negar", DialogInterface.OnClickListener { dialog, _ ->
+                            }, activity.getString(R.string.deny), DialogInterface.OnClickListener { dialog, _ ->
                                 dialog.dismiss()
                                 activity.finish()
                             }, false
@@ -74,8 +75,8 @@ class AppPermissionManager(private val activity: Activity) {
                     } else {
                         showDialog(
                             "",
-                            "Você negou algumas permissões. Habilite as permissões em [Configurações] -> [Permissions]",
-                            "Configurações",
+                            activity.getString(R.string.app_permissions_denied),
+                            activity.getString(R.string.configurations),
                             DialogInterface.OnClickListener { _, _ ->
                                 val intent = Intent(
                                     Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -85,7 +86,7 @@ class AppPermissionManager(private val activity: Activity) {
                                 activity.startActivity(intent)
                                 activity.finish()
                             },
-                            "Sair",
+                            activity.getString(R.string.exit),
                             DialogInterface.OnClickListener { dialog, _ ->
                                 dialog.dismiss()
                                 activity.finish()
