@@ -9,16 +9,14 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.text.TextUtils
-import android.widget.ImageView
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.hlandim.marvelheroes.R
 import com.hlandim.marvelheroes.database.model.Hero
-import com.hlandim.marvelheroes.database.model.Participation
 import com.hlandim.marvelheroes.view.details.ParticipationAdapter
+import com.hlandim.marvelheroes.view.details.ParticipationParent
 import com.hlandim.marvelheroes.view.list.HeroesAdapter
 
 
@@ -31,16 +29,14 @@ fun setItems(recyclerView: RecyclerView, list: MutableList<Hero>) {
     }
 }
 
-
 @BindingAdapter("participation")
-fun setParticipation(listView: ListView, list: List<Participation>) {
+fun setParticipation(expandableListView: ExpandableListView, list: List<ParticipationParent>) {
     val participation = list.take(3)
-    listView.adapter?.let {
+    expandableListView.expandableListAdapter?.let {
         if (it is ParticipationAdapter) {
             it.setParticipation(participation)
         }
     }
-
 }
 
 

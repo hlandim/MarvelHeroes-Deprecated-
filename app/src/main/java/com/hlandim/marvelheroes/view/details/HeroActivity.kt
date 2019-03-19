@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity
 import android.transition.ChangeBounds
 import android.transition.ChangeImageTransform
 import android.transition.TransitionSet
-import android.view.ViewTreeObserver
-import android.widget.ListView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -65,31 +63,8 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
                 loadImage(binding, hero)
             }
 
+        binding.heroContent.listParticipation.setAdapter(ParticipationAdapter(emptyList(), this))
 
-        binding.heroContent.listComics.adapter = ParticipationAdapter(emptyList(), this)
-        binding.heroContent.listEvents.adapter = ParticipationAdapter(emptyList(), this)
-        binding.heroContent.listSeries.adapter = ParticipationAdapter(emptyList(), this)
-        binding.heroContent.listStories.adapter = ParticipationAdapter(emptyList(), this)
-
-        configureListHeight(binding.heroContent.listComics)
-        configureListHeight(binding.heroContent.listEvents)
-        configureListHeight(binding.heroContent.listSeries)
-        configureListHeight(binding.heroContent.listStories)
-    }
-
-    private fun configureListHeight(list: ListView) {
-        val viewTreeObserver = list.viewTreeObserver
-        if (viewTreeObserver.isAlive) {
-            viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    list.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                    val layoutParams = list.layoutParams
-                    val finalHeight = list.height * list.adapter.count * 1.3
-                    layoutParams.height = finalHeight.toInt()
-                    list.layoutParams = layoutParams
-                }
-            })
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

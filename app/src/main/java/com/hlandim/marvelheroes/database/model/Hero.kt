@@ -7,6 +7,7 @@ import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
 import com.hlandim.marvelheroes.R
+import com.hlandim.marvelheroes.view.details.ParticipationParent
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,6 +36,7 @@ class Hero(
     @Embedded(prefix = "events_")
     var events: ParticipationResponse
 ) : Parcelable {
+
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeInt(id)
         dest?.writeString(name)
@@ -110,6 +112,28 @@ class Hero(
         return id + 30
     }
 
+    fun getAllParticipation(): List<ParticipationParent> {
+        val participation = arrayListOf<ParticipationParent>()
+        if (this.comics.items.isNotEmpty()) {
+            val comicsParticipation = ParticipationParent("Comics", this.comics.items.take(MAX_PARTICIPATION))
+            participation.add(comicsParticipation)
+        }
+        if (this.events.items.isNotEmpty()) {
+            val eventsParticipation = ParticipationParent("Events", this.events.items.take(MAX_PARTICIPATION))
+            participation.add(eventsParticipation)
+        }
+        if (this.stories.items.isNotEmpty()) {
+            val storiesParticipation = ParticipationParent("Stories", this.stories.items.take(MAX_PARTICIPATION))
+            participation.add(storiesParticipation)
+        }
+        if (this.series.items.isNotEmpty()) {
+            val seriesParticipation = ParticipationParent("Series", this.series.items.take(MAX_PARTICIPATION))
+            participation.add(seriesParticipation)
+        }
+
+        return participation
+    }
+
     fun getFavoriteImage(fromList: Boolean): Int {
         return when {
             favorite -> R.drawable.ic_star_filled
@@ -125,6 +149,7 @@ class Hero(
     }
 
     companion object CREATOR : Parcelable.Creator<Hero> {
+        const val MAX_PARTICIPATION = 3
         override fun createFromParcel(parcel: Parcel): Hero {
             return Hero(parcel)
         }

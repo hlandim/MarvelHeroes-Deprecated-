@@ -3,57 +3,108 @@ package com.hlandim.marvelheroes.view.details
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
+import android.widget.BaseExpandableListAdapter
 import com.hlandim.marvelheroes.database.model.Participation
-import com.hlandim.marvelheroes.databinding.HeroParticipationListRowBinding
+import com.hlandim.marvelheroes.databinding.ParticipationListChildLayoutBinding
+import com.hlandim.marvelheroes.databinding.ParticipationListGroupLayoutBinding
 
 class ParticipationAdapter(
-    var list: List<Participation>,
-    val listener: ParticipationListener
-) : BaseAdapter() {
+    private var participationGroupList: List<ParticipationParent>,
+    private var listener: ParticipationListener
+) :
+    BaseExpandableListAdapter() {
 
+    override fun getGroup(groupPosition: Int): ParticipationParent {
+        return participationGroupList[groupPosition]
+    }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val holder: ViewHolder
-        val rowView: View
-        if (convertView == null) {
+    override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+        return true
+    }
+
+    override fun hasStableIds(): Boolean {
+        return false
+    }
+
+    override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup?): View {
+        var rowView = convertView
+        val holderGroup: ViewHolderGroup
+        if (rowView == null) {
             val layoutInflater = LayoutInflater.from(parent?.context)
-            val binding = HeroParticipationListRowBinding.inflate(layoutInflater, parent, false)
-            holder = ViewHolder(binding)
+            val binding = ParticipationListGroupLayoutBinding.inflate(layoutInflater, parent, false)
+            holderGroup = ViewHolderGroup(binding)
             rowView = binding.root
-            rowView.tag = holder
+            rowView.tag = holderGroup
         } else {
-            rowView = convertView
-            holder = rowView.tag as ViewHolder
+            holderGroup = rowView.tag as ViewHolderGroup
         }
-        val participation = list[position]
-        holder.bind(list[position])
-        holder.binding.root.setOnClickListener { listener.onParticipationClicked(participation) }
+
+        holderGroup.bind(participationGroupList[groupPosition].title)
         return rowView
 
     }
 
-    override fun getItem(position: Int): Any {
-        return list[position]
+    override fun getChildrenCount(groupPosition: Int): Int {
+        return participationGroupList[groupPosition].participation.size
     }
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
+    override fun getChild(groupPosition: Int, childPosition: Int): Any {
+        return participationGroupList[groupPosition].participation[childPosition]
     }
 
-    override fun getCount(): Int {
-        return list.size
+    override fun getGroupId(groupPosition: Int): Long {
+        return groupPosition.toLong()
     }
 
-    class ViewHolder(val binding: HeroParticipationListRowBinding) {
-        fun bind(participation: Participation) {
-            binding.paticipation = participation
+    override fun getChildView(
+        groupPosition: Int,
+        childPosition: Int,
+        isLastChild: Boolean,
+        convertView: View?,
+        parent: ViewGroup?
+    ): View {
+        var rowView = convertView
+        val holderGroup: ViewHolderChild
+        if (rowView == null) {
+            val layoutInflater = LayoutInflater.from(parent?.context)
+            val binding = ParticipationListChildLayoutBinding.inflate(layoutInflater, parent, false)
+            holderGroup = ViewHolderChild(binding)
+            rowView = binding.root
+            rowView.tag = holderGroup
+        } else {
+            holderGroup = rowView.tag as ViewHolderChild
+        }
+        val participation = participationGroupList[groupPosition].participation[childPosition]
+        holderGroup.bind(participation.name)
+        rowView.setOnClickListener {
+            listener.onParticipationClicked(participation)
+        }
+        return rowView
+    }
+
+    override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+        return childPosition.toLong()
+    }
+
+    override fun getGroupCount(): Int {
+        return participationGroupList.size
+    }
+
+    fun setParticipation(participation: List<ParticipationParent>) {
+        this.participationGroupList = participation
+        notifyDataSetChanged()
+    }
+
+    private class ViewHolderGroup(val participationGroup: ParticipationListGroupLayoutBinding) {
+        fun bind(title: String) {
+            participationGroup.title = title
         }
     }
 
-    fun setParticipation(list: List<Participation>) {
-        this.list = list
-        notifyDataSetChanged()
+    private class ViewHolderChild(val participation: ParticipationListChildLayoutBinding) {
+        fun bind(title: String) {
+            participation.title = title
+        }
     }
 
     interface ParticipationListener {
