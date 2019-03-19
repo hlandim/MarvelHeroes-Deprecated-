@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.provider.SearchRecentSuggestions
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.Menu
@@ -12,6 +13,7 @@ import android.view.MenuItem
 import com.hlandim.marvelheroes.util.AppPermissionManager
 import com.hlandim.marvelheroes.util.getViewModel
 import com.hlandim.marvelheroes.view.list.HeroesFragment
+import com.hlandim.marvelheroes.view.list.MySuggestionProvider
 import com.hlandim.marvelheroes.viewmodel.HeroesViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -131,6 +133,10 @@ class MainActivity : AppCompatActivity() {
         val isLoading = mViewModel.isLoading.value
         if (Intent.ACTION_SEARCH == intent.action && isLoading != null && !isLoading) {
             val query = intent.getStringExtra(SearchManager.QUERY)
+            SearchRecentSuggestions(this, MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE).saveRecentQuery(
+                query,
+                null
+            )
             mViewModel.searchHero(query)
 
         }
