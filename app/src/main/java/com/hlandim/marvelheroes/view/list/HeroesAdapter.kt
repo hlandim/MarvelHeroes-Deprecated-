@@ -126,10 +126,7 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
     fun replaceItems(newHeroes: MutableList<Hero>) {
         val noMoreResult = this.hereos == newHeroes
         val actualSize = hereos.size
-        var newList = false
-        if (actualSize > 0 && newHeroes.size > actualSize && this.hereos != newHeroes.subList(0, actualSize)) {
-            newList = true
-        }
+        val newList = isNewList(newHeroes)
         this.hereos = newHeroes
 
         if (forceClearList || newList || actualSize == 0) {
@@ -149,6 +146,14 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
             }
         }
 
+    }
+
+    private fun isNewList(newHeroes: MutableList<Hero>): Boolean {
+        val actualSize = hereos.size
+        if (actualSize > 0 && newHeroes.size > actualSize && this.hereos != newHeroes.subList(0, actualSize)) {
+            return true
+        }
+        return false
     }
 
     private data class FooterControl(val showLoading: Boolean, val showNoMoreResult: Boolean)
