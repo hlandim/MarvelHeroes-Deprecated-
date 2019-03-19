@@ -4,8 +4,6 @@ import android.arch.lifecycle.LiveData
 import android.support.annotation.WorkerThread
 import com.hlandim.marvelheroes.database.dao.FavoriteDao
 import com.hlandim.marvelheroes.database.model.Hero
-import com.hlandim.marvelheroes.util.androidThread
-import com.hlandim.marvelheroes.util.ioThread
 import com.hlandim.marvelheroes.web.HeroesDataSource
 import com.hlandim.marvelheroes.web.MarvelHeroResponses
 import com.hlandim.marvelheroes.web.MarvelParticipationResponses
@@ -25,16 +23,13 @@ class HeroesRepository(
 
     override fun searchHero(query: String, page: Int): Observable<MarvelHeroResponses> {
         return dataSource.searchHero(query, page)
-            .subscribeOn(ioThread())
-            .observeOn(androidThread())
             .doOnNext {
                 markFavoriteHeroes(it.data.results)
             }
     }
 
     override fun getHeroes(page: Int): Observable<MarvelHeroResponses> {
-        return dataSource.getHeroes(page).subscribeOn(ioThread())
-            .observeOn(androidThread())
+        return dataSource.getHeroes(page)
             .doOnNext {
                 markFavoriteHeroes(it.data.results)
             }

@@ -181,14 +181,16 @@ class HeroesViewModel(application: Application) :
     }
 
     private fun handleResponse(it: MarvelHeroResponses) {
-        val finalList = heroes.value?.toMutableList()
-        if (pageCount == 1) {
-            finalList?.clear()
+        if (isShowingFavorite.value != null && isShowingFavorite.value == false) {
+            val finalList = heroes.value?.toMutableList()
+            if (pageCount == 1) {
+                finalList?.clear()
+            }
+            finalList?.addAll(it.data.results)
+            heroes.value = finalList
+            communicationError.value = null
+            isEmptySearch.value = finalList.isNullOrEmpty()
         }
-        finalList?.addAll(it.data.results)
-        heroes.value = finalList
-        communicationError.value = null
-        isEmptySearch.value = finalList.isNullOrEmpty()
         isLoading.value = false
     }
 
