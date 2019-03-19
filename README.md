@@ -27,6 +27,7 @@ MVVM
 - Hero details with comics, events, stories and series participation\'s.
 - Custom transitions between list and hero details.
 - Hero search by name.
+- Search with Recent Query Suggestions
 
 # Classes
 Activities:
