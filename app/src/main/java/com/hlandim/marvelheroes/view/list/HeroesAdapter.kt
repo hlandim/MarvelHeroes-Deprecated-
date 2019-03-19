@@ -126,8 +126,13 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
     fun replaceItems(newHeroes: MutableList<Hero>) {
         val noMoreResult = this.hereos == newHeroes
         val actualSize = hereos.size
+        var newList = false
+        if (actualSize > 0 && newHeroes.size > actualSize && this.hereos != newHeroes.subList(0, actualSize)) {
+            newList = true
+        }
         this.hereos = newHeroes
-        if (forceClearList) {
+
+        if (forceClearList || newList || actualSize == 0) {
             notifyDataSetChanged()
             forceClearList = false
         } else {
@@ -139,7 +144,6 @@ class HeroesAdapter(private var hereos: MutableList<Hero>) :
                         showNoMoreResult = true
                     )
                 )
-                actualSize == 0 -> notifyDataSetChanged()
                 newHeroes.size > actualSize -> notifyItemRangeChanged(actualSize, hereos.size - 1)
                 else -> notifyDataSetChanged()
             }

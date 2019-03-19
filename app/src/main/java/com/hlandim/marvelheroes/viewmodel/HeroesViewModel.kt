@@ -67,13 +67,13 @@ class HeroesViewModel(application: Application) :
         heroes.value?.let {
             heroesCache = it.toMutableList()
         }
-        this.heroes.value = favoritesHeroes.value?.toMutableList()
+        this.heroes.postValue(favoritesHeroes.value?.toMutableList())
         isShowingFavorite.value = true
         isLoading.value = false
     }
 
     fun hideFavoritesHeroes() {
-        heroes.value?.clear()
+//        heroes.value?.clear()
         heroes.value = heroesCache
         isShowingFavorite.value = false
     }

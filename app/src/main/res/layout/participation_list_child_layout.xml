@@ -32,5 +32,6 @@
             android:layout_alignParentEnd="true"
             android:padding="10dp"
             android:src="@drawable/arrow_right" />
+
     </RelativeLayout>
 </layout>

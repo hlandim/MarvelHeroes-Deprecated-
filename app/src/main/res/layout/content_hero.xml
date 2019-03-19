@@ -54,7 +54,7 @@
             <ExpandableListView
                 android:id="@+id/listParticipation"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/tvListParticipationLabel"
                 android:nestedScrollingEnabled="true"
                 app:participation="@{viewModel.hero.getAllParticipation}" />
