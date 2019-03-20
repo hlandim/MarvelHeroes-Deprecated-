@@ -28,4 +28,5 @@
     <string name="exit">Sair</string>
     <string name="participation">Participações</string>
     <string name="search_suggestions_authorities">com.hlandim.marvelheroes.view.list.MySuggestionProvider</string>
+    <string name="content_descriptions_loading_image">Loading image</string>
 </resources>

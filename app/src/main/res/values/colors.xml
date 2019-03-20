@@ -4,7 +4,12 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#e23636</color>
     <color name="translucent_scrim_top">#26000000</color>
+    <color name="translucent_list_scrim_top">#99000000</color>
     <color name="translucent_scrim_top_center">#0C000000</color>
-    <color name="translucent_scrim_bottom">#4F000000</color>
-    <color name="translucent_scrim_bottom_center">#2A000000</color>
+    <color name="translucent_list_scrim_top_center">#66000000</color>
+    <color name="translucent_scrim_bottom">#80000000</color>
+    <color name="translucent_list_scrim_bottom">#000000</color>
+    <color name="translucent_scrim_bottom_center">#40000000</color>
+    <color name="translucent_list_scrim_bottom_center">#B3000000</color>
+    <color name="white">#fff</color>
 </resources>

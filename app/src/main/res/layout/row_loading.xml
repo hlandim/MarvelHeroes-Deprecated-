@@ -9,21 +9,22 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/heroes_list_height"
         android:gravity="center"
         android:orientation="vertical">
 
         <ProgressBar
+            android:layout_centerInParent="true"
             android:id="@+id/pbLoadingNewHeroes"
             style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="invisible" />
 
         <TextView
             android:id="@+id/tvNoMoreHeroes"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="@string/no_more_results"

@@ -3,10 +3,12 @@ package com.hlandim.marvelheroes.view.list
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -74,6 +76,12 @@ class HeroesFragment : Fragment(), HeroesAdapter.ListListener {
         viewModel: HeroesViewModel
     ) {
         binding.recyclerView.adapter = mAdapter
+        var spanCount = 3
+        val orientation = resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            spanCount = 4
+        }
+        binding.recyclerView.layoutManager = GridLayoutManager(context, spanCount)
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)

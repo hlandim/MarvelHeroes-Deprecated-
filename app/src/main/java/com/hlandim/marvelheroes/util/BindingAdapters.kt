@@ -12,6 +12,7 @@ import android.text.TextUtils
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.hlandim.marvelheroes.R
 import com.hlandim.marvelheroes.database.model.Hero
@@ -57,6 +58,7 @@ fun setImageUrl(view: ImageView, url: String?) {
     if (!TextUtils.isEmpty(url)) {
         Glide.with(view.context)
             .load(url)
+            .transition(DrawableTransitionOptions.withCrossFade())
             .apply(RequestOptions.bitmapTransform(RoundedCorners(14)))
             .apply(RequestOptions().placeholder(R.drawable.ic_image_placeholder))
             .into(view)

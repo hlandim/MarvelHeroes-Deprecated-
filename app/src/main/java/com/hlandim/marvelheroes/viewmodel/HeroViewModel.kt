@@ -48,7 +48,7 @@ class HeroViewModel(application: Application) :
 
     private fun setFabIcon() {
         hero.value?.let {
-            fabResource.value = hero.value?.getFavoriteImage(false)
+            fabResource.value = hero.value?.getFavoriteImage()
         }
     }
 
@@ -114,7 +114,7 @@ class HeroViewModel(application: Application) :
     }
 
     private fun updateFabImage(it: Hero) {
-        fabResource.value = it.getFavoriteImage(false)
+        fabResource.value = it.getFavoriteImage()
     }
 
     override fun onCleared() {

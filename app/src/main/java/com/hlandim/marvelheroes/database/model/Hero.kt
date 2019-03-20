@@ -134,10 +134,9 @@ class Hero(
         return participation
     }
 
-    fun getFavoriteImage(fromList: Boolean): Int {
+    fun getFavoriteImage(): Int {
         return when {
             favorite -> R.drawable.ic_star_filled
-            fromList -> R.drawable.ic_star_list
             else -> R.drawable.ic_star
         }
     }

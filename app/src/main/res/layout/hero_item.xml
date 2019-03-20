@@ -16,94 +16,99 @@
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="4dp"
+        android:layout_height="@dimen/heroes_list_height"
+        android:padding="1dp"
+        android:layout_margin="2dp"
         android:clickable="true"
         android:focusable="true"
         android:foreground="?attr/selectableItemBackground"
-        android:padding="5dp"
         app:cardCornerRadius="0dp">
 
         <RelativeLayout
             android:id="@+id/contentLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp">
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/posterImageView"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/thumbnails"
-                android:scaleType="fitCenter"
+                android:scaleType="fitXY"
                 android:src="@drawable/ic_image_placeholder"
                 android:transitionName="heroImage"
                 app:imageUrl="@{hero.thumbnail.getFullThumbnailUrl}" />
 
             <TextView
                 android:id="@+id/titleTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_toStartOf="@+id/imgFavorite"
-                android:layout_toEndOf="@id/posterImageView"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/scrim_list_bottom"
                 android:ellipsize="end"
                 android:maxLines="2"
+                android:padding="2dp"
+                android:textColor="@android:color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="@{hero.name}" />
 
+            <!-- <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_below="@+id/titleTextView"
+                 android:layout_alignParentBottom="true"
+                 android:layout_marginStart="8dp"
+                 android:layout_marginBottom="10dp"
+                 android:layout_toStartOf="@+id/imgFavorite"
+                 android:layout_toEndOf="@id/posterImageView"
+                 android:orientation="horizontal"
+                 android:visibility="@{!TextUtils.isEmpty(hero.modified) ? View.VISIBLE: View.GONE}">
+
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="@string/modified"
+                     android:textSize="12sp"
+                     android:textStyle="italic" />
+
+                 <TextView
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="@{hero.getModifiedString}"
+                     android:textSize="12sp"
+                     android:textStyle="italic" />
+
+             </LinearLayout>-->
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/titleTextView"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="10dp"
-                android:layout_toStartOf="@+id/imgFavorite"
-                android:layout_toEndOf="@id/posterImageView"
-                android:orientation="horizontal"
-                android:visibility="@{!TextUtils.isEmpty(hero.modified) ? View.VISIBLE: View.GONE}">
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/scrim_list_top"
+                android:gravity="end"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/modified"
-                    android:textSize="12sp"
-                    android:textStyle="italic" />
+                <ImageView
+                    android:id="@+id/imgFavorite"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:clickable="true"
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{hero.getModifiedString}"
-                    android:textSize="12sp"
-                    android:textStyle="italic" />
-
+                    android:contentDescription="@null"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_star_list"
+                    android:visibility="visible"
+                    app:imageResource="@{hero.getFavoriteImage}" />
             </LinearLayout>
 
-
-            <ImageView
-                android:padding="10dp"
-                android:id="@+id/imgFavorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_centerVertical="true"
-                android:visibility="visible"
-                android:layout_marginEnd="10dp"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_star_list"
-                app:imageResource="@{hero.getFavoriteImage(true)}" />
-
         </RelativeLayout>
+
 
     </android.support.v7.widget.CardView>
 </layout>
