@@ -3,7 +3,7 @@ package com.hlandim.marvelheroes.viewmodel
 import android.app.Application
 import android.arch.lifecycle.*
 import android.util.Log
-import com.hlandim.marvelheroes.R
+import com.hlandim.marvelheroes.base.BaseViewModel
 import com.hlandim.marvelheroes.database.AppDataBase
 import com.hlandim.marvelheroes.database.HeroesRepository
 import com.hlandim.marvelheroes.database.model.Hero
@@ -14,18 +14,11 @@ import com.hlandim.marvelheroes.web.MarvelHeroResponses
 import com.hlandim.marvelheroes.web.mavel.HeroesService
 import com.hlandim.marvelheroes.web.mavel.MarvelApi
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.plugins.RxJavaPlugins
-import retrofit2.HttpException
-import java.io.IOException
-import java.net.UnknownHostException
 
 class HeroesViewModel(application: Application) :
-    AndroidViewModel(application), LifecycleObserver, Consumer<Throwable> {
-
-
-    private val compositeDisposable = CompositeDisposable()
+    BaseViewModel(application), LifecycleObserver, Consumer<Throwable> {
 
     val heroes: MutableLiveData<MutableList<Hero>> =
         MutableLiveData<MutableList<Hero>>().apply { value = mutableListOf() }
@@ -34,7 +27,6 @@ class HeroesViewModel(application: Application) :
     val isShowingFavorite: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val isEmptySearch: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
-    val communicationError = MutableLiveData<String>()
     var heroesRepository: HeroesRepository
     var isSearchingMode: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     private var searchQuery: String? = null
@@ -42,7 +34,7 @@ class HeroesViewModel(application: Application) :
 
     init {
         RxJavaPlugins.setErrorHandler(this)
-        val heroesService = HeroesService(MarvelApi.create())
+        val heroesService = HeroesService(MarvelApi.create(application))
         heroesRepository = HeroesRepository(
             heroesService,
             AppDataBase.getDataBase(application).favoriteDao()
@@ -188,26 +180,9 @@ class HeroesViewModel(application: Application) :
             }
             finalList?.addAll(it.data.results)
             heroes.value = finalList
-            communicationError.value = null
             isEmptySearch.value = finalList.isNullOrEmpty()
         }
         isLoading.value = false
-    }
-
-    private fun handleCommunicationError(t: Throwable) {
-        val message = when (t) {
-            is UnknownHostException,
-            is IOException -> getApplication<Application>().getString(R.string.network_error)
-            is HttpException -> getApplication<Application>().getString(R.string.invalid_parameters_error)
-            else -> getApplication<Application>().getString(R.string.unknown_error)
-        }
-
-        communicationError.value = message
-    }
-
-    override fun onCleared() {
-        compositeDisposable.dispose()
-        super.onCleared()
     }
 
     override fun accept(t: Throwable?) {

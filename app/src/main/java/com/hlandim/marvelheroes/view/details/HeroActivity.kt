@@ -1,13 +1,12 @@
 package com.hlandim.marvelheroes.view.details
 
 import android.app.Activity
+import android.arch.lifecycle.Observer
 import android.content.Intent
-import android.databinding.DataBindingUtil
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.support.transition.TransitionInflater
-import android.support.v7.app.AppCompatActivity
 import android.transition.ChangeBounds
 import android.transition.ChangeImageTransform
 import android.transition.TransitionSet
@@ -19,6 +18,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.hlandim.marvelheroes.R
+import com.hlandim.marvelheroes.base.BaseActivity
 import com.hlandim.marvelheroes.database.model.Hero
 import com.hlandim.marvelheroes.database.model.Participation
 import com.hlandim.marvelheroes.database.model.Thumbnail
@@ -30,8 +30,11 @@ import com.hlandim.marvelheroes.web.ResultParticipationResponse
 import kotlinx.android.synthetic.main.activity_hero.*
 
 
-class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationListener {
+class HeroActivity : BaseActivity<ActivityHeroBinding>(),
+    ParticipationAdapter.ParticipationListener {
 
+    override val layoutId: Int
+        get() = R.layout.activity_hero
 
     lateinit var mViewModel: HeroViewModel
 
@@ -43,7 +46,6 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(toolbar)
-        val binding = DataBindingUtil.setContentView<ActivityHeroBinding>(this, R.layout.activity_hero)
         var hero = intent?.extras?.getParcelable("hero") as Hero
         savedInstanceState?.let {
             hero = it.getParcelable("hero") as Hero
@@ -64,6 +66,12 @@ class HeroActivity : AppCompatActivity(), ParticipationAdapter.ParticipationList
             }
 
         binding.heroContent.listParticipation.setAdapter(ParticipationAdapter(emptyList(), this))
+
+        mViewModel.messageEvent.observe(this, Observer {
+            it?.let { message ->
+                onDisplayMessage(message)
+            }
+        })
 
     }
 

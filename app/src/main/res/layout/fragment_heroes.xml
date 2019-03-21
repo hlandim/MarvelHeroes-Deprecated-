@@ -45,27 +45,6 @@
             android:layout_height="match_parent"
             android:background="@android:color/white"
             android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="@{viewModel.communicationError != null ?  View.VISIBLE : View.GONE}">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/sad_image"
-                android:src="@drawable/sad" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@{viewModel.communicationError}" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:gravity="center"
             android:visibility="@{safeUnbox(viewModel.isEmptySearch) &amp;&amp; !safeUnbox(viewModel.isLoading) ?  View.VISIBLE : View.GONE}">
 
             <TextView

@@ -18,89 +18,63 @@
         android:focusable="true"
         android:paddingTop="10dp">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/white"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="@{viewModel.communicationError != null ?  View.VISIBLE : View.GONE}">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/sad_image"
-                    android:src="@drawable/sad" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@{viewModel.communicationError}" />
-            </LinearLayout>
-
-            <RelativeLayout
+            <TextView
+                android:id="@+id/tvMovieName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="@{viewModel.communicationError != null ?  View.GONE : View.VISIBLE}">
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="@{viewModel.participation.title}"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <ImageView
+
+                android:id="@+id/imgPoster"
+                android:layout_width="200dp"
+                android:layout_height="300dp"
+                android:layout_below="@+id/tvMovieName"
+                android:adjustViewBounds="true"
+                android:importantForAccessibility="no"
+                android:scaleType="fitCenter"
+                android:src="@drawable/close_movie_details"
+                app:imageUrl="@{viewModel.participation.thumbnail.getFullThumbnailUrl}" />
+
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/imgPoster">
 
                 <TextView
-                    android:id="@+id/tvMovieName"
-                    android:layout_width="match_parent"
+                    android:id="@+id/imgBackLabel"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
                     android:gravity="center"
-                    android:text="@{viewModel.participation.title}"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-
-                    android:id="@+id/imgPoster"
-                    android:layout_width="200dp"
-                    android:layout_height="300dp"
-                    android:layout_below="@+id/tvMovieName"
-                    android:adjustViewBounds="true"
-                    android:importantForAccessibility="no"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/close_movie_details"
-                    app:imageUrl="@{viewModel.participation.thumbnail.getFullThumbnailUrl}" />
+                    android:text="@{viewModel.participation.description}"
+                    android:textSize="20sp"
+                    android:textStyle="italic"
+                    android:visibility="@{safeUnbox(viewModel.isLoading) ?  View.GONE : View.VISIBLE}" />
 
 
-                <FrameLayout
+                <ProgressBar
+                    android:id="@+id/pbLoadingNewHeroes"
+                    style="?android:attr/progressBarStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/imgPoster">
-
-                    <TextView
-                        android:id="@+id/imgBackLabel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="@{viewModel.participation.description}"
-                        android:textSize="20sp"
-                        android:textStyle="italic"
-                        android:visibility="@{safeUnbox(viewModel.isLoading) ?  View.GONE : View.VISIBLE}" />
+                    android:visibility="@{safeUnbox(viewModel.isLoading) ?  View.VISIBLE : View.GONE}" />
 
 
-                    <ProgressBar
-                        android:id="@+id/pbLoadingNewHeroes"
-                        style="?android:attr/progressBarStyle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="@{safeUnbox(viewModel.isLoading) ?  View.VISIBLE : View.GONE}" />
-
-
-                </FrameLayout>
-            </RelativeLayout>
+            </FrameLayout>
         </RelativeLayout>
     </ScrollView>
 </layout>

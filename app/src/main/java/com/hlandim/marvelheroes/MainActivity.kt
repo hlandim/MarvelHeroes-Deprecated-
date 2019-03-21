@@ -6,17 +6,21 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.SearchRecentSuggestions
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
+import com.hlandim.marvelheroes.base.BaseActivity
+import com.hlandim.marvelheroes.databinding.ActivityMainBinding
 import com.hlandim.marvelheroes.util.AppPermissionManager
 import com.hlandim.marvelheroes.util.getViewModel
 import com.hlandim.marvelheroes.view.list.HeroesFragment
 import com.hlandim.marvelheroes.view.list.MySuggestionProvider
 import com.hlandim.marvelheroes.viewmodel.HeroesViewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding>() {
+
+    override val layoutId: Int
+        get() = R.layout.activity_main
 
     private lateinit var mViewModel: HeroesViewModel
     private lateinit var searchView: SearchView
@@ -30,8 +34,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         mViewModel = createViewModel()
+        mViewModel.messageEvent.observe(this, Observer {
+            it?.let { message ->
+                onDisplayMessage(message)
+            }
+        })
         if (permissionManager.checkAndRequestPermission()) {
             initApp()
         }

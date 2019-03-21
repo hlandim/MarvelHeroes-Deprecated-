@@ -1,10 +1,14 @@
 package com.hlandim.marvelheroes.viewmodel
 
 import android.app.Application
-import android.arch.lifecycle.*
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.OnLifecycleEvent
 import android.util.Log
 import android.view.View
 import com.hlandim.marvelheroes.R
+import com.hlandim.marvelheroes.base.BaseViewModel
 import com.hlandim.marvelheroes.database.AppDataBase
 import com.hlandim.marvelheroes.database.HeroesRepository
 import com.hlandim.marvelheroes.database.model.Hero
@@ -15,26 +19,19 @@ import com.hlandim.marvelheroes.web.ResultParticipationResponse
 import com.hlandim.marvelheroes.web.mavel.HeroesService
 import com.hlandim.marvelheroes.web.mavel.MarvelApi
 import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import retrofit2.HttpException
-import java.io.IOException
-import java.net.SocketException
-import java.net.UnknownHostException
 
 class HeroViewModel(application: Application) :
-    AndroidViewModel(application), LifecycleObserver {
+    BaseViewModel(application), LifecycleObserver {
 
-    private val compositeDisposable = CompositeDisposable()
 
     val hero: MutableLiveData<Hero> = MutableLiveData()
     val fabResource: MutableLiveData<Int> = MutableLiveData<Int>().apply { value = R.drawable.ic_star }
     val isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>().apply { value = false }
     val participation: MutableLiveData<ResultParticipationResponse> = MutableLiveData()
-    val communicationError = MutableLiveData<String>()
     var heroesRepository: HeroesRepository
 
     init {
-        val heroesService = HeroesService(MarvelApi.create())
+        val heroesService = HeroesService(MarvelApi.create(application))
         heroesRepository = HeroesRepository(
             heroesService,
             AppDataBase.getDataBase(application).favoriteDao()
@@ -56,7 +53,6 @@ class HeroViewModel(application: Application) :
     fun getParticipationDetails(participationPath: String) {
 
         isLoading.value = true
-        communicationError.value = null
 
         val disposable = heroesRepository.getParticipationDetails(participationPath)
             .subscribeOn(ioThread())
@@ -117,27 +113,11 @@ class HeroViewModel(application: Application) :
         fabResource.value = it.getFavoriteImage()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.dispose()
-    }
-
-
     private fun handlerError(it: Throwable) {
         Log.w(Tags.COMMUNICATION_ERROR, it.message)
         handleCommunicationError(it)
         isLoading.value = false
+
     }
 
-    private fun handleCommunicationError(t: Throwable) {
-        val message = when (t) {
-            is UnknownHostException,
-            is IOException -> getApplication<Application>().getString(R.string.network_error)
-            is SocketException -> getApplication<Application>().getString(R.string.network_error)
-            is HttpException -> getApplication<Application>().getString(R.string.invalid_parameters_error)
-            else -> getApplication<Application>().getString(R.string.unknown_error)
-        }
-
-        communicationError.value = message
-    }
 }
