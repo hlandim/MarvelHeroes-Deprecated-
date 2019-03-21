@@ -21,7 +21,7 @@ MVVM
 - Using [Mockito](https://github.com/mockito/mockito) library to create tests.
 - Using [Gson](https://github.com/google/gson) library to make MarvelApi json response parse.
 - Using [AndroidViewAnimations](https://github.com/daimajia/AndroidViewAnimations) library to create participation screen animations
-- Handling network connection lost.
+- Handling network connection lost (With retry button).
 - Avoiding lost data when configurations changes.
 - Heroes list pagination with UI feedback\'s.
 - Hero details with comics, events, stories and series participation\'s.
